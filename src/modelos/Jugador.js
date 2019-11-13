@@ -10,29 +10,18 @@ class Jugador extends Modelo {
 
         this.orientacion = orientaciones.derecha;
 
-        // Animaciones
-        this.aDispararDerecha = new Animacion(imagenes.jugador_disparando_derecha,
-            this.ancho, this.alto, 6, 4, this.finAnimacionDisparar.bind(this));
-        // No pasar funciones del DIRECTAMNTE COMO callback
-        // El objeto que ejecute la función no sabrá interpretar el "this."
-
-        this.aDispararIzquierda = new Animacion(imagenes.jugador_disparando_izquierda,
-            this.ancho, this.alto, 6, 4, this.finAnimacionDisparar.bind(this));
+        this.ancho = this.imagen.width*factorRedimension*0.5;
+        this.alto = this.imagen.height*factorRedimension*0.5;
 
 
-        this.aIdleDerecha = new Animacion(imagenes.jugador_idle_derecha,
-            this.ancho, this.alto, 6, 8);
-        this.aIdleIzquierda = new Animacion(imagenes.jugador_idle_izquierda,
-            this.ancho, this.alto, 6, 8);
-        this.aCorriendoDerecha =
-            new Animacion(imagenes.jugador_corriendo_derecha,
-                this.ancho, this.alto, 6, 8);
-        this.aCorriendoIzquierda = new Animacion(imagenes.jugador_corriendo_izquierda,
-            this.ancho, this.alto, 6, 8);
-        this.aSaltandoDerecha = new Animacion(imagenes.jugador_saltando_derecha,
-            this.ancho, this.alto, 6, 4);
-        this.aSaltandoIzquierda = new Animacion(imagenes.jugador_saltando_izquierda,
-            this.ancho, this.alto, 6, 4);
+        this.aIdleDerecha = new Animacion(imagenes.jugador_derecha,
+            this.ancho, this.alto, 6, 3);
+        this.aIdleIzquierda = new Animacion(imagenes.jugador_izquierda,
+            this.ancho, this.alto, 6, 3);
+        this.aIdleArriba = new Animacion(imagenes.jugador_arriba,
+            this.ancho, this.alto, 6, 3);
+        this.aIdleAbajo = new Animacion(imagenes.jugador_abajo,
+            this.ancho, this.alto, 6, 3);
 
 
         this.animacion = this.aIdleDerecha;
@@ -44,25 +33,11 @@ class Jugador extends Modelo {
     }
 
     actualizar() {
-        if (this.enElAire && this.estado == estados.moviendo) {
-            this.estado = estados.saltando;
-        }
-        if (!this.enElAire && this.estado == estados.saltando) {
-            this.estado = estados.moviendo;
-        }
-
         if (this.tiempoInvulnerable > 0) {
             this.tiempoInvulnerable--;
         }
 
         this.animacion.actualizar();
-
-        // ¿Esta en el aire?
-        if (this.choqueAbajo == true) {
-            this.enElAire = false;
-        } else {
-            this.enElAire = true;
-        }
 
         // Establecer orientación
         if (this.vx > 0) {
@@ -71,42 +46,24 @@ class Jugador extends Modelo {
         if (this.vx < 0) {
             this.orientacion = orientaciones.izquierda;
         }
-
-        switch (this.estado) {
-            case estados.saltando:
-                if (this.orientacion == orientaciones.derecha) {
-                    this.animacion = this.aSaltandoDerecha;
-                }
-                if (this.orientacion == orientaciones.izquierda) {
-                    this.animacion = this.aSaltandoIzquierda;
-                }
-                break;
-            case estados.disparando:
-                if (this.orientacion == orientaciones.derecha) {
-                    this.animacion = this.aDispararDerecha;
-                }
-                if (this.orientacion == orientaciones.izquierda) {
-                    this.animacion = this.aDispararIzquierda;
-                }
-                break;
-            case estados.moviendo:
-                if (this.vx != 0) {
-                    if (this.orientacion == orientaciones.derecha) {
-                        this.animacion = this.aCorriendoDerecha;
-                    }
-                    if (this.orientacion == orientaciones.izquierda) {
-                        this.animacion = this.aCorriendoIzquierda;
-                    }
-                }
-                if (this.vx == 0) {
-                    if (this.orientacion == orientaciones.derecha) {
-                        this.animacion = this.aIdleDerecha;
-                    }
-                    if (this.orientacion == orientaciones.izquierda) {
-                        this.animacion = this.aIdleIzquierda;
-                    }
-                }
-                break;
+        if (this.vy < 0) {
+            this.orientacion = orientaciones.arriba;
+        }
+        if (this.vy > 0) {
+            this.orientacion = orientaciones.abajo;
+        }
+        //Activar animacion para el lado que vaya
+        if (this.orientacion == orientaciones.derecha) {
+            this.animacion = this.aIdleDerecha;
+        }
+        if (this.orientacion == orientaciones.izquierda) {
+            this.animacion = this.aIdleIzquierda;
+        }
+        if (this.orientacion == orientaciones.arriba) {
+            this.animacion = this.aIdleArriba;
+        }
+        if (this.orientacion == orientaciones.abajo) {
+            this.animacion = this.aIdleAbajo;
         }
 
 
@@ -134,7 +91,15 @@ class Jugador extends Modelo {
             //Direccion disparo
             var disparo = new DisparoJugador(this.x, this.y);
             if (this.orientacion == orientaciones.izquierda) {
-                disparo.vx = disparo.vx * -1; //invertir
+                disparo.vx = disparo.defaultVx * -1; //invertir
+            }
+            if (this.orientacion == orientaciones.arriba) {
+                disparo.vx = 0;
+                disparo.vy = disparo.defaultVy;
+            }
+            if (this.orientacion == orientaciones.abajo) {
+                disparo.vx = 0;
+                disparo.vy = disparo.defaultVy * -1; //invertir
             }
             return disparo;
 
@@ -142,10 +107,6 @@ class Jugador extends Modelo {
             return null;
         }
 
-    }
-
-    finAnimacionDisparar() {
-        this.estado = estados.moviendo;
     }
 
     dibujar(scrollX, scrollY) {
@@ -157,13 +118,6 @@ class Jugador extends Modelo {
             contexto.globalAlpha = 1;
         } else {
             this.animacion.dibujar(this.x - scrollX, this.y- scrollY);
-        }
-    }
-
-    saltar() {
-        if (!this.enElAire) {
-            this.vy = -16;
-            this.enElAire = true;
         }
     }
 

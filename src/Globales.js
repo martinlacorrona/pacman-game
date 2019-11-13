@@ -24,3 +24,7 @@ estados.impactado = 7;
 var orientaciones = {};
 orientaciones.derecha = 2;
 orientaciones.izquierda = 3;
+orientaciones.arriba = 4;
+orientaciones.abajo = 5;
+
+factorRedimension = 0.35;

@@ -6,16 +6,9 @@ class Modelo {
         this.y = y;
         this.ancho = this.imagen.width;
         this.alto = this.imagen.height;
-    }
 
-    estaEnPantalla (){
-        if ( (this.x - gameLayer.scrollX) - this.ancho/2 <= 480 &&
-            (this.x - gameLayer.scrollX) + this.ancho/2 >= 0 &&
-            (this.y) - this.alto/2 <= 320 &&
-            (this.y) + this.alto/2 >= 0 ){
-            return true;
-        }
-        return false;
+        //Declaramos como undefinida la animacion
+        this.animacion = undefined;
     }
 
 
@@ -24,11 +17,13 @@ class Modelo {
         scrollY = scrollY || 0;
         contexto.drawImage(this.imagen,
             this.x - this.ancho /2 - scrollX,
-            this.y - this.alto /2 - scrollY);
+            this.y - this.alto /2 - scrollY,
+            this.ancho,
+            this.alto);
     }
 
 
-    colisiona (modelo){
+    colisiona(modelo){
         var colisiona = false;
 
         if ( modelo.x - modelo.ancho/2 <=  this.x + this.ancho/2
@@ -40,6 +35,11 @@ class Modelo {
 
         }
         return colisiona;
+    }
+
+    actualizar() {
+        if(this.animacion != undefined)
+            this.animacion.actualizar();
     }
 
 }
