@@ -2,6 +2,9 @@ class Jugador extends Modelo {
 
     constructor(x, y) {
         super(imagenes.jugador, x, y);
+
+        this.velocidad = 3;
+
         this.vidas = 3;
         this.tiempoInvulnerable = 0;
         this.estado = estados.moviendo;
@@ -9,7 +12,7 @@ class Jugador extends Modelo {
         this.vy = 0; // velocidadY
 
         this.orientacion = orientaciones.derecha;
-        
+
         this.ancho = 40*factorRedimension;
         this.alto = 40*factorRedimension;
 
@@ -74,11 +77,11 @@ class Jugador extends Modelo {
     }
 
     moverX(direccion) {
-        this.vx = direccion * 3;
+        this.vx = direccion * this.velocidad;
     }
 
     moverY(direccion) {
-        this.vy = direccion * 3;
+        this.vy = direccion * this.velocidad;
     }
 
     disparar() {
@@ -95,11 +98,11 @@ class Jugador extends Modelo {
             }
             if (this.orientacion == orientaciones.arriba) {
                 disparo.vx = 0;
-                disparo.vy = disparo.defaultVy;
+                disparo.vy = disparo.defaultVy * -1; //invertir
             }
             if (this.orientacion == orientaciones.abajo) {
                 disparo.vx = 0;
-                disparo.vy = disparo.defaultVy * -1; //invertir
+                disparo.vy = disparo.defaultVy;
             }
             return disparo;
 

@@ -47,7 +47,7 @@ class GameLayer extends Layer {
         // Eliminar disparos JUGADOR sin velocidad
         for (var i=0; i < this.disparosJugador.length; i++){
             if ( this.disparosJugador[i] != null &&
-                this.disparosJugador[i].vx == 0){
+                this.disparosJugador[i].vx == 0 && this.disparosJugador[i].vy == 0){
 
                 this.espacio
                     .eliminarCuerpoDinamico(this.disparosJugador[i]);
@@ -168,26 +168,18 @@ class GameLayer extends Layer {
 
         // Eje X
         if (controles.moverX > 0){
-            //this.jugador.moverX(1);
-            //this.jugador.moverY(0);
             this.ultimoControl = orientaciones.derecha;
 
         } else if ( controles.moverX < 0){
-            //this.jugador.moverX(-1);
-            //this.jugador.moverY(0);
             this.ultimoControl = orientaciones.izquierda;
 
         }
 
         // Eje Y
         if (controles.moverY < 0){
-            //this.jugador.moverY(1);
-            //this.jugador.moverX(0);
             this.ultimoControl = orientaciones.arriba;
 
         } else if (controles.moverY > 0){
-            //this.jugador.moverY(-1);
-            //this.jugador.moverX(0);
             this.ultimoControl = orientaciones.abajo;
         }
 
