@@ -93,7 +93,7 @@ class GameLayer extends Layer {
             }
         }
 
-        //Colisiones jugador con recolectable
+        // //Colisiones jugador con recolectable
         for(var i=0; i < this.recolectables.length; i++) {
             if(this.jugador.colisiona(this.recolectables[i])) {
                 this.espacio.eliminarCuerpoDinamico(this.recolectables[i]);
