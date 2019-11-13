@@ -4,6 +4,9 @@ class GameLayer extends Layer {
         super();
         this.mensaje = new Boton(imagenes.mensaje_como_jugar, 480/2, 320/2);
         this.pausa = true;
+
+        this.ultimoControl = orientaciones.derecha;
+
         this.iniciar();
     }
 
@@ -164,27 +167,44 @@ class GameLayer extends Layer {
         }
 
         // Eje X
-        if ( controles.moverX > 0 ){
-            this.jugador.moverX(1);
+        if (controles.moverX > 0){
+            //this.jugador.moverX(1);
+            //this.jugador.moverY(0);
+            this.ultimoControl = orientaciones.derecha;
 
-        }else if ( controles.moverX < 0){
-            this.jugador.moverX(-1);
+        } else if ( controles.moverX < 0){
+            //this.jugador.moverX(-1);
+            //this.jugador.moverY(0);
+            this.ultimoControl = orientaciones.izquierda;
 
-        } else {
-            this.jugador.moverX(0);
         }
 
         // Eje Y
-        if ( controles.moverY < 0 ){
-            this.jugador.moverY(1);
+        if (controles.moverY < 0){
+            //this.jugador.moverY(1);
+            //this.jugador.moverX(0);
+            this.ultimoControl = orientaciones.arriba;
 
-        }else if ( controles.moverY > 0){
-            this.jugador.moverY(-1);
-
-        } else {
-            this.jugador.moverY(0);
+        } else if (controles.moverY > 0){
+            //this.jugador.moverY(-1);
+            //this.jugador.moverX(0);
+            this.ultimoControl = orientaciones.abajo;
         }
 
+        this.procesarUltimaOrientacion();
+
+    }
+
+    procesarUltimaOrientacion() {
+        if(this.ultimoControl == orientaciones.derecha) {
+            this.jugador.moverX(1);
+        } else if(this.ultimoControl == orientaciones.izquierda) {
+            this.jugador.moverX(-1);
+        } else if(this.ultimoControl == orientaciones.arriba) {
+            this.jugador.moverY(1);
+        } else if(this.ultimoControl == orientaciones.abajo) {
+            this.jugador.moverY(-1);
+        }
     }
 
     cargarMapa(ruta){
