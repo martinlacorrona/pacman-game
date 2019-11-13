@@ -9,9 +9,9 @@ class Jugador extends Modelo {
         this.vy = 0; // velocidadY
 
         this.orientacion = orientaciones.derecha;
-
-        this.ancho = this.imagen.width*factorRedimension*0.6;
-        this.alto = this.imagen.height*factorRedimension*0.6;
+        
+        this.ancho = 40*factorRedimension;
+        this.alto = 40*factorRedimension;
 
 
         this.aIdleDerecha = new Animacion(imagenes.jugador_derecha,
