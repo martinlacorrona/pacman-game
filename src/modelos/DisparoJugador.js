@@ -2,7 +2,7 @@ class DisparoJugador extends Disparo {
 
     constructor(x, y) {
         super(x, y, imagenes.disparo_jugador2)
-        this.vx = 9;
+        this.vx = 9 / factorFotogramas;
         this.vy = 0;
 
         this.defaultVx = 9;
