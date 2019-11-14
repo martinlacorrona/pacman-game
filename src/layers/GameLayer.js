@@ -190,7 +190,6 @@ class GameLayer extends Layer {
     procesarUltimaOrientacion() {
         if(this.ultimoControl == orientaciones.derecha) {
             this.jugador.moverX(1);
-            console.log("INTENTANDO MOVER DERECHA.")
         } else if(this.ultimoControl == orientaciones.izquierda) {
             this.jugador.moverX(-1);
         } else if(this.ultimoControl == orientaciones.arriba) {
@@ -272,6 +271,7 @@ class GameLayer extends Layer {
         this.botonDisparo.pulsado = false;
         // suponemos que el pad está sin tocar
         controles.moverX = 0;
+        controles.moverY = 0;
         // Suponemos a false
         controles.continuar = false;
 
@@ -290,6 +290,15 @@ class GameLayer extends Layer {
                 if (orientacionX < -20) { // de -20 a 0 no contabilizamos
                     controles.moverX = orientacionX;
                 }
+
+                var orientacionY = this.pad.obtenerOrientacionY(pulsaciones[i].y);
+                if (orientacionY > 20) { // de 0 a 20 no contabilizamos
+                    controles.moverY = (-1) * orientacionY;
+                }
+                if (orientacionY < -20) { // de -20 a 0 no contabilizamos
+                    controles.moverY = (-1) * orientacionY;
+                }
+                console.log("Otientacion X: " + orientacionX + " || Orientacion Y: " + ((-1) * orientacionY))
             }
             if (this.botonDisparo.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
                 this.botonDisparo.pulsado = true;
