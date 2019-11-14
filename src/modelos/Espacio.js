@@ -88,6 +88,8 @@ class Espacio {
                         movimientoPosible = izquierdaEstatico - derechaDinamico ;
                     }
 
+                    console.log("CHOQUE DERECHA");
+
                 }
 
             }

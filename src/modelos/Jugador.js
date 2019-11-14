@@ -3,7 +3,7 @@ class Jugador extends Modelo {
     constructor(x, y) {
         super(imagenes.jugador, x, y);
 
-        this.velocidad = 3;
+        this.velocidad = 1;
 
         this.vidas = 3;
         this.tiempoInvulnerable = 0;
@@ -18,13 +18,13 @@ class Jugador extends Modelo {
 
 
         this.aIdleDerecha = new Animacion(imagenes.jugador_derecha,
-            this.ancho, this.alto, 6, 3);
+            this.ancho, this.alto, 6*factorFotogramas, 3);
         this.aIdleIzquierda = new Animacion(imagenes.jugador_izquierda,
-            this.ancho, this.alto, 6, 3);
+            this.ancho, this.alto, 6*factorFotogramas, 3);
         this.aIdleArriba = new Animacion(imagenes.jugador_arriba,
-            this.ancho, this.alto, 6, 3);
+            this.ancho, this.alto, 6*factorFotogramas, 3);
         this.aIdleAbajo = new Animacion(imagenes.jugador_abajo,
-            this.ancho, this.alto, 6, 3);
+            this.ancho, this.alto, 6*factorFotogramas, 3);
 
 
         this.animacion = this.aIdleDerecha;

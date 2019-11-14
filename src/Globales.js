@@ -28,3 +28,4 @@ orientaciones.arriba = 4;
 orientaciones.abajo = 5;
 
 factorRedimension = 0.35;
+factorFotogramas = 3;

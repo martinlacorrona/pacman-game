@@ -190,6 +190,7 @@ class GameLayer extends Layer {
     procesarUltimaOrientacion() {
         if(this.ultimoControl == orientaciones.derecha) {
             this.jugador.moverX(1);
+            console.log("INTENTANDO MOVER DERECHA.")
         } else if(this.ultimoControl == orientaciones.izquierda) {
             this.jugador.moverX(-1);
         } else if(this.ultimoControl == orientaciones.arriba) {
