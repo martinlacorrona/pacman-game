@@ -22,10 +22,10 @@ estados.disparando = 6;
 estados.impactado = 7;
 
 var orientaciones = {};
-orientaciones.derecha = 2;
-orientaciones.izquierda = 3;
-orientaciones.arriba = 4;
-orientaciones.abajo = 5;
+orientaciones.derecha = 0;
+orientaciones.izquierda = 1;
+orientaciones.arriba = 2;
+orientaciones.abajo = 3;
 
 factorRedimension = 0.35;
 factorFotogramas = 3;

@@ -339,7 +339,6 @@ class GameLayer extends Layer {
                 if (orientacionY < -20) { // de -20 a 0 no contabilizamos
                     controles.moverY = (-1) * orientacionY;
                 }
-                console.log("Otientacion X: " + orientacionX + " || Orientacion Y: " + ((-1) * orientacionY))
             }
             if (this.botonDisparo.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
                 this.botonDisparo.pulsado = true;
