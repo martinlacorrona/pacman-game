@@ -9,6 +9,7 @@ var imagenes = {
     jugador_izquierda : "res/pacman-izquierda.png",
    //bloque_basico : "resOld/bloque_metal.png",
     bloque_basico : "res/bloque-basico.png",
+    bloque_vacio : "res/bloque-vacio.png",
     fondo : "res/fondo.png",
     enemigo : "resOld/enemigo.png",
     enemigo_movimiento : "resOld/enemigo_movimiento.png",

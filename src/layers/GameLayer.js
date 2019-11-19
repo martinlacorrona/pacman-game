@@ -20,6 +20,7 @@ class GameLayer extends Layer {
         this.scrollY = 0;
 
         this.bloques = [];
+        this.bloquesTeletransporte = [];
 
         this.enemigos = [];
 
@@ -93,7 +94,7 @@ class GameLayer extends Layer {
             }
         }
 
-        // //Colisiones jugador con recolectable
+        //Colisiones jugador con recolectable
         for(var i=0; i < this.recolectables.length; i++) {
             if(this.jugador.colisiona(this.recolectables[i])) {
                 this.espacio.eliminarCuerpoDinamico(this.recolectables[i]);
@@ -102,6 +103,26 @@ class GameLayer extends Layer {
                 //TODO: sumar puntos o lo que sea
             }
         }
+
+        //Colisiones jugador - bloqueTeletranposrtable
+        for(var i=0; i < this.bloquesTeletransporte.length; i++) {
+            if(this.jugador.colisiona(this.bloquesTeletransporte[i])) {
+                this.jugador.x = this.bloquesTeletransporte[i].getPosXTeletransporte();
+                this.jugador.y = this.bloquesTeletransporte[i].getPosYTeletransporte();
+            }
+        }
+
+        //Colisiones enemigo - bloqueTeletranposrtable
+        for (var j=0; j < this.enemigos.length; j++) {
+            for (var i = 0; i < this.bloquesTeletransporte.length; i++) {
+                if (this.enemigos[j].colisiona(this.bloquesTeletransporte[i])) {
+                    this.enemigos[j].x = this.bloquesTeletransporte[i].getPosXTeletransporte();
+                    this.enemigos[j].y = this.bloquesTeletransporte[i].getPosYTeletransporte();
+                }
+            }
+        }
+
+        //Colisiones enemigo - bloqueTeletransportable
 
         // Enemigos muertos fuera del juego
         for (var j=0; j < this.enemigos.length; j++){
@@ -224,7 +245,7 @@ class GameLayer extends Layer {
     cargarObjetoMapa(simbolo, x, y) {
         switch(simbolo) {
             case "#":
-                var bloque = new BloqueBasico(x,y);
+                let bloque = new BloqueBasico(x,y);
                 bloque.y = bloque.y - bloque.alto/2;
                 this.bloques.push(bloque);
                 this.espacio.agregarCuerpoEstatico(bloque);
@@ -232,7 +253,7 @@ class GameLayer extends Layer {
                 break;
 
             case ".":
-                var recolectableNormal = new RecolectableNormal(x,y);
+                let recolectableNormal = new RecolectableNormal(x,y);
                 recolectableNormal.y = recolectableNormal.y - recolectableNormal.alto/2;
                 this.recolectables.push(recolectableNormal);
                 this.espacio.agregarCuerpoDinamico(recolectableNormal);
@@ -240,7 +261,7 @@ class GameLayer extends Layer {
                 break;
 
             case "+":
-                var recolectableGrande = new RecolectableGrande(x,y);
+                let recolectableGrande = new RecolectableGrande(x,y);
                 recolectableGrande.y = recolectableGrande.y - recolectableGrande.alto/2;
                 this.recolectables.push(recolectableGrande);
                 this.espacio.agregarCuerpoDinamico(recolectableGrande);
@@ -256,11 +277,31 @@ class GameLayer extends Layer {
                 break;
 
             case "S":
-                var enemigo = new EnemigoBasico(x,y);
+                let enemigo = new EnemigoBasico(x,y);
                 enemigo.y = enemigo.y - enemigo.alto/2;
                 // modificación para empezar a contar desde el suelo
                 this.enemigos.push(enemigo);
                 this.espacio.agregarCuerpoDinamico(enemigo);
+
+                break;
+
+            case ">":
+                let bloqueTeletranporteDerecha = new BloqueTeletransporteDerecha(x,y);
+                bloqueTeletranporteDerecha.y = bloqueTeletranporteDerecha.y - bloqueTeletranporteDerecha.alto/2;
+                // modificación para empezar a contar desde el suelo
+                this.bloquesTeletransporte.push(bloqueTeletranporteDerecha);
+                this.espacio.agregarCuerpoDinamico(bloqueTeletranporteDerecha);
+
+                break;
+
+            case "<":
+                let bloqueTeletranporteIzquierda = new BloqueTeletransporteIzquierda(x,y);
+                this.bloquesTeletransporte[0].bloqueToTeleport = bloqueTeletranporteIzquierda;
+                bloqueTeletranporteIzquierda.bloqueToTeleport = this.bloquesTeletransporte[0];
+                bloqueTeletranporteIzquierda.y = bloqueTeletranporteIzquierda.y - bloqueTeletranporteIzquierda.alto/2;
+                // modificación para empezar a contar desde el suelo
+                this.bloquesTeletransporte.push(bloqueTeletranporteIzquierda);
+                this.espacio.agregarCuerpoDinamico(bloqueTeletranporteIzquierda);
 
                 break;
         }
