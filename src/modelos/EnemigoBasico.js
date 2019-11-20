@@ -23,7 +23,7 @@ class EnemigoBasico extends Enemigo {
             this.ancho, this.alto, 6*factorFotogramas, 2);
 
         this.aMorir = new Animacion(imagenes.enemigo_morir,
-            this.ancho,this.alto,6,8, this.finAnimacionMorir.bind(this));
+            this.ancho,this.alto,6*factorFotogramas,8, this.finAnimacionMorir.bind(this));
 
         // Ref a la animación actual
         this.updateAnimation();
@@ -31,44 +31,49 @@ class EnemigoBasico extends Enemigo {
 
     actualizar() {
         super.actualizar();
+        if (this.estado != estados.muriendo && this.estado != estados.muerto) {
+            if (this.vx == 0 && this.vy == 0 && this.orientacion != undefined) { //SE HA PARADO
+                this.ultimaOrientacion = this.orientacion;
+                this.ultimaOrientacionContrario = this.getOrientacionContraria(this.ultimaOrientacion);
+                this.orientacion = undefined; //orientacion no definida
+            }
 
-        if(this.vx == 0 && this.vy == 0 && this.orientacion != undefined) { //SE HA PARADO
-            this.ultimaOrientacion = this.orientacion;
-            this.ultimaOrientacionContrario = this.getOrientacionContraria(this.ultimaOrientacion);
-            this.orientacion = undefined; //orientacion no definida
-        }
-
-        if ( this.estado == estados.muriendo) {
-            this.animacion = this.aMorir;
+            if (this.estado == estados.muriendo) {
+                this.animacion = this.aMorir;
+                this.vx = 0;
+                this.vy = 0;
+            } else if (this.estado != estados.muerto) {
+                if (this.vx == 0 && this.vy == 0) {
+                    let orientacion = Math.floor(Math.random() * 4);
+                    while (orientacion == this.ultimaOrientacion || orientacion == this.ultimaOrientacionContrario) {
+                        orientacion = Math.floor(Math.random() * 4);
+                    }
+                    this.orientacion = orientacion;
+                    this.updateAnimation();
+                }
+            }
+            switch (this.orientacion) {
+                case orientaciones.derecha:
+                    this.vx = this.velocidad * 1;
+                    this.vy = 0;
+                    break;
+                case orientaciones.izquierda:
+                    this.vx = this.velocidad * -1;
+                    this.vy = 0;
+                    break;
+                case orientaciones.arriba:
+                    this.vx = 0;
+                    this.vy = this.velocidad * -1;
+                    break;
+                case orientaciones.abajo:
+                    this.vx = 0;
+                    this.vy = this.velocidad * 1;
+                    break;
+            }
+        } else {
             this.vx = 0;
             this.vy = 0;
-        } else if(this.estado != estados.muerto) {
-            if ( this.vx == 0 && this.vy == 0) {
-                let orientacion = Math.floor(Math.random() * 4);
-                while(orientacion == this.ultimaOrientacion || orientacion == this.ultimaOrientacionContrario) {
-                    orientacion = Math.floor(Math.random() * 4);
-                }
-                this.orientacion = orientacion;
-                this.updateAnimation();
-            }
-        }
-        switch (this.orientacion) {
-            case orientaciones.derecha:
-                this.vx = this.velocidad * 1;
-                this.vy = 0;
-                break;
-            case orientaciones.izquierda:
-                this.vx = this.velocidad * -1;
-                this.vy = 0;
-                break;
-            case orientaciones.arriba:
-                this.vx = 0;
-                this.vy = this.velocidad * -1;
-                break;
-            case orientaciones.abajo:
-                this.vx = 0;
-                this.vy = this.velocidad * 1;
-                break;
+            this.animacion = this.aMorir;
         }
     }
 
