@@ -7,6 +7,7 @@ var imagenes = {
     jugador_abajo : "res/pacman-abajo.png",
     jugador_derecha : "res/pacman-derecha.png",
     jugador_izquierda : "res/pacman-izquierda.png",
+    jugador_muriendose : "res/pacman-muriendose.png",
     bloque_basico : "res/bloque-basico.png",
     bloque_vacio : "res/bloque-vacio.png",
     fondo : "res/fondo.png",

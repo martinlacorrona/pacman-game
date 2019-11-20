@@ -10,9 +10,6 @@ var tipoPulsacion = {}; // tipos
 tipoPulsacion.inicio = 1;
 tipoPulsacion.mantener = 2;
 
-var nivelActual = 0;
-var nivelMaximo = 2;
-
 var estados = {};
 estados.moviendo= 2; // Incluye parado, derecha , izquierda
 estados.saltando = 3;
@@ -26,6 +23,7 @@ orientaciones.derecha = 0;
 orientaciones.izquierda = 1;
 orientaciones.arriba = 2;
 orientaciones.abajo = 3;
+orientaciones.parado = 4;
 
 factorRedimension = 0.35;
 factorFotogramas = 3;

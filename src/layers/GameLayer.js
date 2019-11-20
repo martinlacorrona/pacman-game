@@ -7,6 +7,8 @@ class GameLayer extends Layer {
 
         this.ultimoControl = orientaciones.derecha;
 
+        this.controladorJuego = new ControladorJuego();
+
         this.iniciar();
     }
 
@@ -29,17 +31,28 @@ class GameLayer extends Layer {
 
 
         this.disparosJugador = [];
-        this.puntos = new Texto(0,480*0.9,320*0.07);
+        this.puntos = new Texto(this.controladorJuego.puntosTotal + this.controladorJuego.puntosNivel,480*0.9,320*0.07);
 
-        this.vidas = new Texto(3, 480*0.8, 320*0.07);
+        this.vidas = new Texto(this.controladorJuego.vidas, 480*0.8, 320*0.07);
 
         this.recolectables = [];
 
-        this.cargarMapa("res/" + nivelActual + ".txt");
+        this.cargarMapa("res/" + this.controladorJuego.nivelActual + ".txt");
     }
 
     actualizar (){
         if (this.pausa){
+            return;
+        }
+
+        //UI values
+        this.puntos.valor = this.controladorJuego.puntosTotal + this.controladorJuego.puntosNivel;
+        this.vidas.valor = this.controladorJuego.vidas;
+
+        if(this.jugador.estado == estados.muerto) {
+            if(this.controladorJuego.vidas == 0)
+                this.controladorJuego = new ControladorJuego();
+            this.iniciar();
             return;
         }
 
@@ -73,6 +86,10 @@ class GameLayer extends Layer {
         for (var i=0; i < this.enemigos.length; i++){
             if (this.jugador.colisiona(this.enemigos[i]) && this.enemigos[i].estado != estados.muerto
                         && this.enemigos[i].estado != estados.muriendo) {
+                if(this.jugador.estado != estados.muerto && this.jugador.estado != estados.muriendo) {
+                    this.controladorJuego.vidas--;
+                    this.controladorJuego.puntosNivel = 0;
+                }
                 this.jugador.golpeado();
             }
         }
@@ -89,7 +106,6 @@ class GameLayer extends Layer {
                     this.disparosJugador.splice(i, 1);
                     i = i-1;
                     this.enemigos[j].impactado();
-                    this.puntos.valor++;
                 }
             }
         }
@@ -100,7 +116,7 @@ class GameLayer extends Layer {
                 this.espacio.eliminarCuerpoDinamico(this.recolectables[i]);
                 this.recolectables.splice(i, 1);
                 i=i-1;
-                //TODO: sumar puntos o lo que sea
+                this.controladorJuego.puntosNivel++;
             }
         }
 
@@ -121,8 +137,6 @@ class GameLayer extends Layer {
                 }
             }
         }
-
-        //Colisiones enemigo - bloqueTeletransportable
 
         // Enemigos muertos fuera del juego
         for (var j=0; j < this.enemigos.length; j++){
@@ -271,7 +285,7 @@ class GameLayer extends Layer {
             case "*":
                 this.jugador = new Jugador(x, y);
                 // modificación para empezar a contar desde el suelo
-                this.jugador.y = this.jugador.y - this.jugador.alto/2;
+                this.jugador.y = this.jugador.y - this.jugador.alto / 2;
                 this.espacio.agregarCuerpoDinamico(this.jugador);
 
                 break;
