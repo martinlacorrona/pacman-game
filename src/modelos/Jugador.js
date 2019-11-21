@@ -3,12 +3,7 @@ class Jugador extends Modelo {
     constructor(x, y) {
         super(imagenes.jugador, x, y);
 
-        this.velocidad = 0.8;
-
-        this.vidas = 3;
-
-        this.puntosNivel = 0;
-        this.puntosTotales = 0;
+        this.velocidad = 1;
 
         this.tiempoInvulnerable = 0;
         this.estado = estados.moviendo;
@@ -126,16 +121,8 @@ class Jugador extends Modelo {
         }
     }
 
-    dibujar(scrollX, scrollY) {
-        scrollX = scrollX || 0;
-        scrollY = scrollY || 0;
-        if (this.tiempoInvulnerable > 0) {
-            contexto.globalAlpha = 0.5;
-            this.animacion.dibujar(this.x - scrollX, this.y - scrollY);
-            contexto.globalAlpha = 1;
-        } else {
-            this.animacion.dibujar(this.x - scrollX, this.y- scrollY);
-        }
+    dibujar() {
+        this.animacion.dibujar(this.x, this.y);
     }
 
     golpeado() {

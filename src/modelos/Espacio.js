@@ -30,7 +30,7 @@ class Espacio {
         }
     }
 
-    actualizar(){
+    actualizar() {
         for( var i=0; i < this.dinamicos.length; i++){
 
             // aplicar gravedad ( dinamicos)

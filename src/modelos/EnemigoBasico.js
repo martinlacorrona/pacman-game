@@ -22,6 +22,9 @@ class EnemigoBasico extends Enemigo {
         this.aIdleAbajo = new Animacion(imagenes.enemigo_basico_abajo,
             this.ancho, this.alto, 6*factorFotogramas, 2);
 
+        this.aIdleEscapando = new Animacion(imagenes.enemigo_basico_escapando,
+            this.ancho, this.alto, 6*factorFotogramas, 4);
+
         // Ref a la animación actual
         this.updateAnimation();
     }
@@ -66,24 +69,27 @@ class EnemigoBasico extends Enemigo {
         } else {
             this.vx = 0;
             this.vy = 0;
-            this.animacion = this.aMorir;
         }
     }
 
     updateAnimation() {
-        switch (this.orientacion) {
-            case orientaciones.derecha:
-                this.animacion = this.aIdleDerecha;
-                break;
-            case orientaciones.izquierda:
-                this.animacion = this.aIdleIzquierda;
-                break;
-            case orientaciones.arriba:
-                this.animacion = this.aIdleArriba;
-                break;
-            case orientaciones.abajo:
-                this.animacion = this.aIdleAbajo;
-                break;
+        if(this.estado == estados.moviendo) {
+            switch (this.orientacion) {
+                case orientaciones.derecha:
+                    this.animacion = this.aIdleDerecha;
+                    break;
+                case orientaciones.izquierda:
+                    this.animacion = this.aIdleIzquierda;
+                    break;
+                case orientaciones.arriba:
+                    this.animacion = this.aIdleArriba;
+                    break;
+                case orientaciones.abajo:
+                    this.animacion = this.aIdleAbajo;
+                    break;
+            }
+        } else if(this.estado == estados.escapando) {
+            this.animacion = this.aIdleEscapando;
         }
     }
 

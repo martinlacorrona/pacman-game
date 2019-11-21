@@ -17,6 +17,7 @@ var imagenes = {
     enemigo_basico_arriba: "res/enemigo-basico-arriba.png",
     enemigo_basico_derecha: "res/enemigo-basico-derecha.png",
     enemigo_basico_izquierda: "res/enemigo-basico-izquierda.png",
+    enemigo_basico_escapando: "res/enemigo-basico-escapando.png",
     puntos_10: "res/10pts.png",
     puntos_100: "res/100pts.png",
     puntos_200: "res/200pts.png",
