@@ -35,6 +35,8 @@ class GameLayer extends Layer {
 
         this.vidas = new Texto(this.controladorJuego.vidas, 480*0.8, 320*0.07);
 
+        this.balas = new Texto(0, 480*0.7, 320*0.07);
+
         this.recolectables = [];
 
         this.ultimoEstadoJuego = estadosJuego.normal;
@@ -59,6 +61,7 @@ class GameLayer extends Layer {
         //UI values
         this.puntos.valor = this.controladorJuego.puntosTotal + this.controladorJuego.puntosNivel;
         this.vidas.valor = this.controladorJuego.vidas;
+        this.balas.valor = this.jugador.balas;
 
         if(this.jugador.estado == estados.muerto) {
             if(this.controladorJuego.vidas == 0) {
@@ -151,6 +154,8 @@ class GameLayer extends Layer {
                     this.comerSemillaBasica(this.recolectables[i].x, this.recolectables[i].y);
                 if(this.recolectables[i] instanceof RecolectableGrande)
                     this.comerSemillaGrande(this.recolectables[i].x, this.recolectables[i].y);
+                if(this.recolectables[i] instanceof RecolectableBala)
+                    this.comerBala(this.recolectables[i].x, this.recolectables[i].y);
 
                 this.espacio.eliminarCuerpoDinamico(this.recolectables[i]);
                 this.recolectables.splice(i, 1);
@@ -219,6 +224,7 @@ class GameLayer extends Layer {
         this.fondoPuntos.dibujar();
         this.puntos.dibujar();
         this.vidas.dibujar();
+        this.balas.dibujar();
         if ( !this.pausa && entrada == entradas.pulsaciones) {
             this.botonDisparo.dibujar();
             this.pad.dibujar();
@@ -322,6 +328,14 @@ class GameLayer extends Layer {
                 recolectableGrande.y = recolectableGrande.y - recolectableGrande.alto/2;
                 this.recolectables.push(recolectableGrande);
                 this.espacio.agregarCuerpoDinamico(recolectableGrande);
+
+                break;
+
+            case "B":
+                let bala = new RecolectableBala(x,y);
+                bala.y = bala.y - bala.alto/2;
+                this.recolectables.push(bala);
+                this.espacio.agregarCuerpoDinamico(bala);
 
                 break;
 
@@ -447,4 +461,9 @@ class GameLayer extends Layer {
         this.controladorJuego.puntosNivel += 10;
     }
 
+    comerBala(x, y) {
+        this.jugador.balas++;
+        this.puntosImagenes.push(
+            new PuntosImagen(x, y, imagenes.puntos_1, 100));
+    }
 }

@@ -5,6 +5,8 @@ class Jugador extends Modelo {
 
         this.velocidad = 1;
 
+        this.balas = 0;
+
         this.tiempoInvulnerable = 0;
         this.estado = estados.moviendo;
         this.vx = 0; // velocidadX
@@ -95,7 +97,7 @@ class Jugador extends Modelo {
 
     disparar() {
         if(this.estado != estados.muriendo && this.estado != estados.muerto) {
-            if (this.tiempoDisparo == 0) {
+            if (this.tiempoDisparo == 0 && this.balas > 0) {
                 // reiniciar Cadencia
                 this.estado = estados.disparando;
                 this.tiempoDisparo = this.cadenciaDisparo;
@@ -113,6 +115,7 @@ class Jugador extends Modelo {
                     disparo.vx = 0;
                     disparo.vy = disparo.defaultVy;
                 }
+                this.balas--;
                 return disparo;
 
             } else {
