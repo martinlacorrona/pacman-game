@@ -35,11 +35,7 @@ class EnemigoBasico extends Enemigo {
                 this.orientacion = undefined; //orientacion no definida
             }
 
-            if (this.estado == estados.muriendo) {
-                this.animacion = this.aMorir;
-                this.vx = 0;
-                this.vy = 0;
-            } else if (this.estado != estados.muerto) {
+            if (this.estado != estados.muerto) {
                 if (this.vx == 0 && this.vy == 0) {
                     let orientacion = Math.floor(Math.random() * 4);
                     while (orientacion == this.ultimaOrientacion || orientacion == this.ultimaOrientacionContrario) {
