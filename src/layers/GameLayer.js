@@ -198,27 +198,14 @@ class GameLayer extends Layer {
 
         this.fondo.dibujar();
 
-        for(var i=0; i < this.recolectables.length; i++) {
-            this.recolectables[i].dibujar();
-        }
-
-        for (var i=0; i < this.puntosImagenes.length; i++) {
-            this.puntosImagenes[i].dibujar();
-        }
-
-        for (var i=0; i < this.bloques.length; i++){
-            this.bloques[i].dibujar();
-        }
-
-        for (var i=0; i < this.disparosJugador.length; i++) {
-            this.disparosJugador[i].dibujar();
-        }
+        this.recolectables.forEach((item) => item.dibujar());
+        this.puntosImagenes.forEach((item) => item.dibujar());
+        this.bloques.forEach((item) => item.dibujar());
+        this.disparosJugador.forEach((item) => item.dibujar());
 
         this.jugador.dibujar();
 
-        for (var i=0; i < this.enemigos.length; i++){
-            this.enemigos[i].dibujar();
-        }
+        this.enemigos.forEach((item) => item.dibujar());
 
         //HUD
         this.fondoPuntos.dibujar();
