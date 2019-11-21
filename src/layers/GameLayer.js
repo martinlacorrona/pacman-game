@@ -50,9 +50,10 @@ class GameLayer extends Layer {
         this.vidas.valor = this.controladorJuego.vidas;
 
         if(this.jugador.estado == estados.muerto) {
-            if(this.controladorJuego.vidas == 0)
-                this.controladorJuego = new ControladorJuego();
-            this.iniciar();
+            if(this.controladorJuego.vidas == 0) {
+                this.perder();
+            }
+            this.reiniciarNivel();
             return;
         }
 
@@ -101,7 +102,7 @@ class GameLayer extends Layer {
                         && this.enemigos[i].estado != estados.muriendo) {
                 if(this.jugador.estado != estados.muerto && this.jugador.estado != estados.muriendo) {
                     this.controladorJuego.vidas--;
-                    this.controladorJuego.puntosNivel = 0;
+                    this.controladorJuego.reiniciarNivel();
                 }
                 this.jugador.golpeado();
             }
@@ -114,15 +115,13 @@ class GameLayer extends Layer {
                     this.enemigos[j] != null &&
                     this.disparosJugador[i].colisiona(this.enemigos[j])) {
 
-                    this.puntosImagenes.push(
-                        new PuntosImagen(this.enemigos[j].x, this.enemigos[j].y, imagenes.puntos_100, 100));
+                    this.golpearEnemigoBala(this.enemigos[j].x, this.enemigos[j].y);
 
                     this.espacio
                         .eliminarCuerpoDinamico(this.disparosJugador[i]);
                     this.disparosJugador.splice(i, 1);
                     i = i-1;
                     this.enemigos[j].impactado();
-                    this.controladorJuego.puntosNivel += 100;
                 }
             }
         }
@@ -130,12 +129,11 @@ class GameLayer extends Layer {
         //Colisiones jugador con recolectable
         for(var i=0; i < this.recolectables.length; i++) {
             if(this.jugador.colisiona(this.recolectables[i])) {
-                this.puntosImagenes.push(
-                    new PuntosImagen(this.recolectables[i].x, this.recolectables[i].y, imagenes.puntos_10, 50));
+                this.comerSemillaBasica(this.recolectables[i].x, this.recolectables[i].y);
+
                 this.espacio.eliminarCuerpoDinamico(this.recolectables[i]);
                 this.recolectables.splice(i, 1);
                 i=i-1;
-                this.controladorJuego.puntosNivel += 10;
             }
         }
 
@@ -391,6 +389,32 @@ class GameLayer extends Layer {
         if ( !this.botonDisparo.pulsado ){
             controles.disparo = false;
         }
+    }
+
+    comerSemillaBasica(x, y) {
+        this.puntosImagenes.push(
+            new PuntosImagen(x, y, imagenes.puntos_10, 100));
+        this.controladorJuego.puntosNivel += 10;
+    }
+
+    golpearEnemigoBala(x, y) {
+        this.puntosImagenes.push(
+            new PuntosImagen(x, y, imagenes.puntos_100, 100));
+        this.controladorJuego.puntosNivel += 100;
+    }
+
+    comerEnemigo(x, y) {
+        this.puntosImagenes.push(
+            new PuntosImagen(x, y, imagenes.puntos_200, 100));
+        this.controladorJuego.puntosNivel += 200;
+    }
+
+    perder() {
+        this.controladorJuego = new ControladorJuego();
+    }
+
+    reiniciarNivel() {
+        this.iniciar();
     }
 
 }

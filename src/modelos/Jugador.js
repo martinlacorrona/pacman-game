@@ -3,7 +3,7 @@ class Jugador extends Modelo {
     constructor(x, y) {
         super(imagenes.jugador, x, y);
 
-        this.velocidad = 1;
+        this.velocidad = 0.8;
 
         this.vidas = 3;
 

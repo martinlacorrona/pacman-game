@@ -4,7 +4,7 @@ class EnemigoBasico extends Enemigo {
         super(x, y, imagenes.enemigo);
         this.estado = estados.moviendo;
 
-        this.velocidad = 0.6;
+        this.velocidad = 0.5;
 
 
         //Empieza con una orintacion aleatoria.

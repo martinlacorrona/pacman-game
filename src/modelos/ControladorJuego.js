@@ -7,4 +7,8 @@ class ControladorJuego {
         this.nivelActual = 0;
         this.ultimoNivel = 2;
     }
+
+    reiniciarNivel() {
+        this.puntosNivel = 0;
+    }
 }
