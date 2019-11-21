@@ -7,10 +7,6 @@ class Enemigo extends Modelo {
         this.alto = 40*factorRedimension;
     }
 
-    finAnimacionMorir(){
-        this.estado = estados.muerto;
-    }
-
     actualizar (){
         this.animacion.actualizar();
     }
@@ -22,9 +18,7 @@ class Enemigo extends Modelo {
     }
 
     impactado(){
-        if ( this.estado != estados.muriendo ){
-            this.estado = estados.muriendo;
-        }
+        this.estado = estados.muerto;
     }
 
     disparar() {}

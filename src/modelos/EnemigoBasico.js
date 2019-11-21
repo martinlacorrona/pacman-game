@@ -22,9 +22,6 @@ class EnemigoBasico extends Enemigo {
         this.aIdleAbajo = new Animacion(imagenes.enemigo_basico_abajo,
             this.ancho, this.alto, 6*factorFotogramas, 2);
 
-        this.aMorir = new Animacion(imagenes.enemigo_morir,
-            this.ancho,this.alto,6*factorFotogramas,8, this.finAnimacionMorir.bind(this));
-
         // Ref a la animación actual
         this.updateAnimation();
     }

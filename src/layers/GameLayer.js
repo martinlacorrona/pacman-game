@@ -18,13 +18,13 @@ class GameLayer extends Layer {
         this.fondo = new Fondo(imagenes.fondo, 480*0.5,320*0.5)
 
         this.espacio = new Espacio(0);
-        this.scrollX = 0;
-        this.scrollY = 0;
 
         this.bloques = [];
         this.bloquesTeletransporte = [];
 
         this.enemigos = [];
+
+        this.puntosImagenes = [];
 
         this.fondoPuntos =
             new Fondo(imagenes.icono_puntos, 480*0.85,320*0.05);
@@ -57,6 +57,19 @@ class GameLayer extends Layer {
         }
 
         this.espacio.actualizar();
+
+        //ACTUALIZAR PUNTOS IMAGEN
+        for (var i=0; i < this.puntosImagenes.length; i++) {
+            this.puntosImagenes[i].actualizar();
+        }
+
+        //Chequear si ya los hay que destruir.
+        for (var i=0; i < this.puntosImagenes.length; i++) {
+            if(this.puntosImagenes[i].isDestruir()) {
+                this.puntosImagenes.splice(i, 1);
+                i=i-1;
+            }
+        }
 
         // Eliminar disparos JUGADOR sin velocidad
         for (var i=0; i < this.disparosJugador.length; i++){
@@ -101,11 +114,15 @@ class GameLayer extends Layer {
                     this.enemigos[j] != null &&
                     this.disparosJugador[i].colisiona(this.enemigos[j])) {
 
+                    this.puntosImagenes.push(
+                        new PuntosImagen(this.enemigos[j].x, this.enemigos[j].y, imagenes.puntos_100, 100));
+
                     this.espacio
                         .eliminarCuerpoDinamico(this.disparosJugador[i]);
                     this.disparosJugador.splice(i, 1);
                     i = i-1;
                     this.enemigos[j].impactado();
+                    this.controladorJuego.puntosNivel += 100;
                 }
             }
         }
@@ -113,10 +130,12 @@ class GameLayer extends Layer {
         //Colisiones jugador con recolectable
         for(var i=0; i < this.recolectables.length; i++) {
             if(this.jugador.colisiona(this.recolectables[i])) {
+                this.puntosImagenes.push(
+                    new PuntosImagen(this.recolectables[i].x, this.recolectables[i].y, imagenes.puntos_10, 50));
                 this.espacio.eliminarCuerpoDinamico(this.recolectables[i]);
                 this.recolectables.splice(i, 1);
                 i=i-1;
-                this.controladorJuego.puntosNivel++;
+                this.controladorJuego.puntosNivel += 10;
             }
         }
 
@@ -156,20 +175,25 @@ class GameLayer extends Layer {
         this.fondo.dibujar();
 
         for(var i=0; i < this.recolectables.length; i++) {
-            this.recolectables[i].dibujar(this.scrollX, this.scrollY);
+            this.recolectables[i].dibujar();
+        }
+
+        for (var i=0; i < this.puntosImagenes.length; i++) {
+            this.puntosImagenes[i].dibujar();
         }
 
         for (var i=0; i < this.bloques.length; i++){
-            this.bloques[i].dibujar(this.scrollX, this.scrollY);
+            this.bloques[i].dibujar();
         }
 
         for (var i=0; i < this.disparosJugador.length; i++) {
-            this.disparosJugador[i].dibujar(this.scrollX, this.scrollY);
+            this.disparosJugador[i].dibujar();
         }
 
-        this.jugador.dibujar(this.scrollX, this.scrollY);
+        this.jugador.dibujar();
+
         for (var i=0; i < this.enemigos.length; i++){
-            this.enemigos[i].dibujar(this.scrollX, this.scrollY);
+            this.enemigos[i].dibujar();
         }
 
         //HUD
