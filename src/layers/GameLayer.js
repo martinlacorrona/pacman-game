@@ -41,7 +41,6 @@ class GameLayer extends Layer {
     }
 
     actualizar (){
-        console.log("jugador x/y: " + this.jugador.x + "/" + this.jugador.y);
         if (this.pausa){
             return;
         }
@@ -246,7 +245,6 @@ class GameLayer extends Layer {
     }
 
     procesarUltimaOrientacion() {
-        console.log(this.ultimoControl);
         if(this.ultimoControl == orientaciones.derecha) {
             this.jugador.moverX(1);
         } else if(this.ultimoControl == orientaciones.izquierda) {
