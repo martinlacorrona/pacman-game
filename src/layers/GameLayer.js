@@ -37,6 +37,8 @@ class GameLayer extends Layer {
 
         this.recolectables = [];
 
+        this.ultimoEstadoJuego = estadosJuego.normal;
+
         this.cargarMapa("res/" + this.controladorJuego.nivelActual + ".txt");
     }
 
@@ -44,6 +46,15 @@ class GameLayer extends Layer {
         if (this.pausa){
             return;
         }
+
+        this.controladorJuego.actualizar();
+
+        if(this.controladorJuego.estadoJuego !== this.ultimoEstadoJuego &&
+                this.controladorJuego.estadoJuego === estadosJuego.normal) {
+            this.enemigos.forEach((item) => item.cambiarEstado(estados.moviendo));
+            this.ultimoEstadoJuego = this.controladorJuego.estadoJuego;
+        }
+
 
         //UI values
         this.puntos.valor = this.controladorJuego.puntosTotal + this.controladorJuego.puntosNivel;
@@ -100,11 +111,17 @@ class GameLayer extends Layer {
         for (var i=0; i < this.enemigos.length; i++){
             if (this.jugador.colisiona(this.enemigos[i]) && this.enemigos[i].estado != estados.muerto
                         && this.enemigos[i].estado != estados.muriendo) {
-                if(this.jugador.estado != estados.muerto && this.jugador.estado != estados.muriendo) {
-                    this.controladorJuego.vidas--;
-                    this.controladorJuego.reiniciarNivel();
+                if(this.controladorJuego.estadoJuego === estadosJuego.normal) {
+                    if (this.jugador.estado != estados.muerto && this.jugador.estado != estados.muriendo) {
+                        this.controladorJuego.vidas--;
+                        this.controladorJuego.reiniciarNivel();
+                    }
+                    this.jugador.golpeado();
+                } else if(this.controladorJuego.estadoJuego === estadosJuego.enemigosEscapando) {
+                    this.comerEnemigo(this.jugador.x, this.jugador.y);
+                    this.enemigos.splice(i, 1);
+                    i = i-1;
                 }
-                this.jugador.golpeado();
             }
         }
 
@@ -129,7 +146,11 @@ class GameLayer extends Layer {
         //Colisiones jugador con recolectable
         for(var i=0; i < this.recolectables.length; i++) {
             if(this.jugador.colisiona(this.recolectables[i])) {
-                this.comerSemillaBasica(this.recolectables[i].x, this.recolectables[i].y);
+                //En funcion de si es una semilla o otra
+                if(this.recolectables[i] instanceof RecolectableNormal)
+                    this.comerSemillaBasica(this.recolectables[i].x, this.recolectables[i].y);
+                if(this.recolectables[i] instanceof RecolectableGrande)
+                    this.comerSemillaGrande(this.recolectables[i].x, this.recolectables[i].y);
 
                 this.espacio.eliminarCuerpoDinamico(this.recolectables[i]);
                 this.recolectables.splice(i, 1);
@@ -415,6 +436,15 @@ class GameLayer extends Layer {
 
     reiniciarNivel() {
         this.iniciar();
+    }
+
+    comerSemillaGrande(x, y) {
+        this.enemigos.forEach((item) => item.cambiarEstado(estados.escapando));
+        this.controladorJuego.activarModoEscapando(1000);
+        this.ultimoEstadoJuego = estadosJuego.enemigosEscapando;
+        this.puntosImagenes.push(
+            new PuntosImagen(x, y, imagenes.puntos_10, 100));
+        this.controladorJuego.puntosNivel += 10;
     }
 
 }

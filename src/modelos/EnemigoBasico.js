@@ -105,4 +105,10 @@ class EnemigoBasico extends Enemigo {
                 return orientaciones.arriba;
         }
     }
+
+    cambiarEstado(estado) {
+        this.orientacion =  this.getOrientacionContraria(this.orientacion);
+        this.estado = estado;
+        this.updateAnimation();
+    }
 }

@@ -12,6 +12,7 @@ var imagenes = {
     bloque_vacio : "res/bloque-vacio.png",
     fondo : "res/fondo.png",
     icono_recolectable : "res/pacdot.png",
+    icono_recolectable_grande : "res/pacdot-big.png",
     menu_fondo : "res/menuImg.png",
     enemigo_basico_abajo: "res/enemigo-basico-abajo.png",
     enemigo_basico_arriba: "res/enemigo-basico-arriba.png",

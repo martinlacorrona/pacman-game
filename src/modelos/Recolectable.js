@@ -7,8 +7,4 @@ class Recolectable extends Modelo {
         this.alto = this.imagen.height*factorRedimension;
     }
 
-    getValor() {
-        return 0;
-    }
-
 }

@@ -28,3 +28,7 @@ orientaciones.parado = 4;
 
 factorRedimension = 0.35;
 factorFotogramas = 3;
+
+var estadosJuego = {};
+estadosJuego.normal = 2;
+estadosJuego.enemigosEscapando = 3;
