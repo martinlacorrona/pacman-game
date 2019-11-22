@@ -52,4 +52,6 @@ function getNextColorEnemigo() {
     return arrayColoresEnemigos[colorEnemigo];
 }
 
+var sizeBloque = 14;
+
 

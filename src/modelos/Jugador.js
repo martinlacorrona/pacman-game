@@ -17,7 +17,6 @@ class Jugador extends Modelo {
         this.ancho = 40*factorRedimension;
         this.alto = 40*factorRedimension;
 
-
         this.aIdleDerecha = new Animacion(imagenes.jugador_derecha,
             this.ancho, this.alto, 6*factorFotogramas, 3);
         this.aIdleIzquierda = new Animacion(imagenes.jugador_izquierda,

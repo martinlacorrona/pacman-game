@@ -60,6 +60,9 @@ class EnemigoBasico extends Enemigo {
 
     actualizar() {
         super.actualizar();
+
+        //this.chequearPosicionJugador();
+
         if (this.estado != estados.muriendo && this.estado != estados.muerto) {
             if (this.vx == 0 && this.vy == 0 && this.orientacion != undefined) { //SE HA PARADO
                 this.ultimaOrientacion = this.orientacion;
@@ -141,5 +144,17 @@ class EnemigoBasico extends Enemigo {
         this.orientacion =  this.getOrientacionContraria(this.orientacion);
         this.estado = estado;
         this.updateAnimation();
+    }
+
+    chequearPosicionJugador() {
+        //si ve al jugador
+        let orientacionFinal = undefined;
+
+        //TODO: implementar aqui el sistema de cosas que hay alrededor.
+
+        if(this.estado == estados.escapando || this.estado == estados.escapandoFinal) {
+            orientacionFinal = this.getOrientacionContraria(orientacionFinal);
+        }
+        this.orientacion = orientacionFinal;
     }
 }
