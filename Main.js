@@ -12,7 +12,7 @@ var layer;
 var gameLayer;
 var menuLayer;
 
-var fotograma = 0;
+let fotograma = 0;
 
 // Inicio capas y bucle del juego
 function iniciarJuego() {
@@ -40,7 +40,7 @@ function loop(){
 }
 
 function actualizarPulsaciones () {
-    for(var i=0; i < pulsaciones.length; i++){
+    for(let i=0; i < pulsaciones.length; i++){
         if ( pulsaciones[i].tipo ==  tipoPulsacion.inicio){
             pulsaciones[i].tipo = tipoPulsacion.mantener;
         }
@@ -49,15 +49,21 @@ function actualizarPulsaciones () {
 
 // Cambio de escalado
 window.addEventListener('load', resize, false);
+window.addEventListener('resize', resize);
 
 function resize() {
-    var escaladoAncho = parseFloat(window.innerWidth / canvas.width);
-    var escaladoAlto = parseFloat(window.innerHeight / canvas.height);
+    let defaultValueCanvasWidth = 480;
+    let defaultValueCanvasHeigth = 320;
+    let escaladoAncho = parseFloat(window.innerWidth / defaultValueCanvasWidth);
+    let escaladoAlto = parseFloat(window.innerHeight / defaultValueCanvasHeigth);
+
+    console.log(escaladoAncho + "/" + escaladoAlto)
+    console.log(window.innerWidth + "/" + window.innerHeight)
 
     escaladoMinimo = Math.min(escaladoAncho, escaladoAlto);
 
-    canvas.width = canvas.width*escaladoMinimo;
-    canvas.height = canvas.height*escaladoMinimo;
+    canvas.width = defaultValueCanvasWidth*escaladoMinimo;
+    canvas.height = defaultValueCanvasHeigth*escaladoMinimo;
 
     contexto.scale(escaladoMinimo,escaladoMinimo);
 }
