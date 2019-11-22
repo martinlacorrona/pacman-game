@@ -58,10 +58,10 @@ class EnemigoBasico extends Enemigo {
         this.updateAnimation();
     }
 
-    actualizar() {
+    actualizar(jugador, espacio) {
         super.actualizar();
 
-        //this.chequearPosicionJugador();
+        //this.chequearPosicionJugador(jugador, espacio);
 
         if (this.estado != estados.muriendo && this.estado != estados.muerto) {
             if (this.vx == 0 && this.vy == 0 && this.orientacion != undefined) { //SE HA PARADO
@@ -151,6 +151,8 @@ class EnemigoBasico extends Enemigo {
         let orientacionFinal = undefined;
 
         //TODO: implementar aqui el sistema de cosas que hay alrededor.
+
+
 
         if(this.estado == estados.escapando || this.estado == estados.escapandoFinal) {
             orientacionFinal = this.getOrientacionContraria(orientacionFinal);

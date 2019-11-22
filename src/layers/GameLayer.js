@@ -78,9 +78,7 @@ class GameLayer extends Layer {
         this.espacio.actualizar();
 
         //ACTUALIZAR PUNTOS IMAGEN
-        for (var i=0; i < this.puntosImagenes.length; i++) {
-            this.puntosImagenes[i].actualizar();
-        }
+        this.puntosImagenes.forEach((item) => item.actualizar());
 
         //Chequear si ya los hay que destruir.
         for (var i=0; i < this.puntosImagenes.length; i++) {
@@ -101,18 +99,10 @@ class GameLayer extends Layer {
             }
         }
 
-        for (var i=0; i < this.recolectables.length; i++) {
-            this.recolectables[i].actualizar();
-        }
-
+        this.recolectables.forEach((item) => item.actualizar());
         this.jugador.actualizar();
-
-        for (var i=0; i < this.enemigos.length; i++){
-            this.enemigos[i].actualizar();
-        }
-        for (var i=0; i < this.disparosJugador.length; i++) {
-            this.disparosJugador[i].actualizar();
-        }
+        this.enemigos.forEach((item) => item.actualizar(this.jugador, this.espacio));
+        this.disparosJugador.forEach((item) => item.actualizar());
 
         // colisiones
         for (var i=0; i < this.enemigos.length; i++){
@@ -125,7 +115,7 @@ class GameLayer extends Layer {
                     }
                     this.jugador.golpeado();
                 } else if(this.controladorJuego.estadoJuego === estadosJuego.enemigosEscapando) {
-                    this.comerEnemigo(this.jugador.x, this.jugador.y);
+                    this.comerEnemigo(this.enemigos[i].x, this.enemigos[i].y);
                     this.enemigos.splice(i, 1);
                     i = i-1;
                 }
