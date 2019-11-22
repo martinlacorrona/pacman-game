@@ -53,5 +53,6 @@ function getNextColorEnemigo() {
 }
 
 var sizeBloque = 14;
+var visionEnemigoBasico = 10;
 
 

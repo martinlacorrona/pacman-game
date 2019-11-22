@@ -61,7 +61,7 @@ class EnemigoBasico extends Enemigo {
     actualizar(jugador, espacio) {
         super.actualizar();
 
-        //this.chequearPosicionJugador(jugador, espacio);
+        this.chequearPosicionJugador(jugador, espacio);
 
         if (this.estado != estados.muriendo && this.estado != estados.muerto) {
             if (this.vx == 0 && this.vy == 0 && this.orientacion != undefined) { //SE HA PARADO
@@ -146,17 +146,45 @@ class EnemigoBasico extends Enemigo {
         this.updateAnimation();
     }
 
-    chequearPosicionJugador() {
+    chequearPosicionJugador(jugador, espacio) {
         //si ve al jugador
         let orientacionFinal = undefined;
 
-        //TODO: implementar aqui el sistema de cosas que hay alrededor.
+        //El enemigo solo ve a la vision que este definida en globales
+        let distanciaMaxima = sizeBloque * visionEnemigoBasico;
+        let maxDerecha = this.x + distanciaMaxima;
+        let maxIzquierda = this.x - distanciaMaxima;
+        let maxArriba = this.y - distanciaMaxima;
+        let maxAbajo = this.y + distanciaMaxima;
 
-
-
-        if(this.estado == estados.escapando || this.estado == estados.escapandoFinal) {
-            orientacionFinal = this.getOrientacionContraria(orientacionFinal);
+        //AVERIGUAMOS PARA DONDE ESTA EL JUGADOR.
+        if(jugador.x >= this.x && jugador.x <= this.x) {
+            //Entonces, esta o arriba o abajo.
+            //Chequeamos si es arriba y esta dentro del rango de vision
+            if(jugador.y < this.y && jugador.y > maxArriba) {
+                orientacionFinal = orientaciones.arriba;
+            }
+            //Chequeamos si es abajo y esta dentro del rango de vision
+            if(jugador.y > this.y && jugador.y < maxAbajo) {
+                orientacionFinal = orientaciones.abajo;
+            }
+        } else if(jugador.y >= this.y && jugador.y <= this.y) {
+            //Entonces, esta o derecha o izquierda.
+            //Chequeamos si es derecha y esta dentro del rango de vision
+            if(jugador.x > this.x && jugador.x < maxDerecha) {
+                orientacionFinal = orientaciones.derecha;
+            }
+            //Chequeamos si es izquierda y esta dentro del rango de vision
+            if(jugador.x < this.x && jugador.x > maxIzquierda) {
+                orientacionFinal = orientaciones.izquierda;
+            }
         }
+
+        if (orientacionFinal != undefined) {
+            if (this.estado == estados.escapando || this.estado == estados.escapandoFinal) {
+                orientacionFinal = this.getOrientacionContraria(orientacionFinal);
+            }
         this.orientacion = orientacionFinal;
+        }
     }
 }

@@ -36,13 +36,11 @@ class ControladorJuego {
 
         enemigos.forEach((item) => item.cambiarEstado(estados.escapando));
         this.activarModoFinal = true;
-        console.log("acivado modo escapando");
     }
 
     isEnableModoEscapandoFinal() {
         if(this.activarModoFinal && this.time / 3 > this.tiempoActivadoModoEscapando) {
             this.activarModoFinal = false;
-            console.log("activado modo escapando final")
             return true;
         }
         return false;
