@@ -24,24 +24,27 @@ class GameLayer extends Layer {
 
         this.enemigos = [];
 
+        this.recolectables = [];
+        this.disparosJugador = [];
+
         this.puntosImagenes = [];
 
-        this.fondoPuntos =
-            new Fondo(imagenes.icono_puntos, 480*0.85,320*0.05);
+        this.fondoPuntos = new Fondo(imagenes.icono_puntos, 480*0.85,320*0.05);
 
-
-        this.disparosJugador = [];
-        this.puntos = new Texto(this.controladorJuego.puntosTotal + this.controladorJuego.puntosNivel,480*0.9,320*0.07);
+        this.puntos = new Texto(this.controladorJuego.getPuntosTotales(),480*0.9,320*0.07);
 
         this.vidas = new Texto(this.controladorJuego.vidas, 480*0.8, 320*0.07);
 
         this.balas = new Texto(0, 480*0.7, 320*0.07);
 
-        this.recolectables = [];
+        this.nivel = new Texto(this.controladorJuego.nivelActual + 1, 480*0.7, 320*0.20);
 
         this.ultimoEstadoJuego = estadosJuego.normal;
 
         this.cargarMapa("res/" + this.controladorJuego.nivelActual + ".txt");
+
+        this.controladorJuego.totalRecolectables = this.recolectables.length;
+        this.controladorJuego.recolectablesRestantes = this.recolectables.length;
     }
 
     actualizar (){
@@ -51,8 +54,30 @@ class GameLayer extends Layer {
 
         this.controladorJuego.actualizar();
 
+        if(this.controladorJuego.isGanar()) {
+            this.controladorJuego.pasarNivel();
+            if(this.controladorJuego.nivelActual == -1) { //HAS ACABADO
+                this.mensaje = new Boton(imagenes.mensaje_ganar, 480/2, 320/2);
+                this.puntos.x = 480/2;
+                this.puntos.y = 320/2;
+                this.puntos.dibujar();
+                this.pausa = true;
+                this.controladorJuego = new ControladorJuego();
+                this.iniciar();
+                return;
+            }
+            this.iniciar();
+            this.mensaje = new Boton(imagenes.mensaje_pasarDeNivel, 480/2, 320/2);
+            this.pausa = true;
+        }
+
         if(this.controladorJuego.isEnableModoEscapandoFinal()) {
             this.enemigos.forEach((item) => item.cambiarEstado(estados.escapandoFinal));
+        }
+
+        if(this.controladorJuego.isGenerarBossFinal()) {
+            //TODO: deberemos tener al boss ya creado, y ponerlo en estado activo, que se empiece a pintar mover y demas.
+            console.log("GENERAR BOSS FINAL!!")
         }
 
         if(this.controladorJuego.estadoJuego !== this.ultimoEstadoJuego &&
@@ -70,6 +95,7 @@ class GameLayer extends Layer {
         if(this.jugador.estado == estados.muerto) {
             if(this.controladorJuego.vidas == 0) {
                 this.perder();
+                return;
             }
             this.reiniciarNivel();
             return;
@@ -206,6 +232,7 @@ class GameLayer extends Layer {
         this.puntos.dibujar();
         this.vidas.dibujar();
         this.balas.dibujar();
+        this.nivel.dibujar();
         if ( !this.pausa && entrada == entradas.pulsaciones) {
             this.botonDisparo.dibujar();
             this.pad.dibujar();
@@ -411,6 +438,17 @@ class GameLayer extends Layer {
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_10, 100));
         this.controladorJuego.puntosNivel += 10;
+        this.controladorJuego.recolectablesRestantes--;
+    }
+
+    comerSemillaGrande(x, y) {
+        this.controladorJuego.activarModoEscapando(500, this.enemigos);
+        this.ultimoEstadoJuego = estadosJuego.enemigosEscapando;
+        this.puntosImagenes.push(
+            new PuntosImagen(x, y, imagenes.puntos_10, 100));
+        this.controladorJuego.puntosNivel += 10;
+
+        this.controladorJuego.recolectablesRestantes--;
     }
 
     golpearEnemigoBala(x, y) {
@@ -427,23 +465,20 @@ class GameLayer extends Layer {
 
     perder() {
         this.controladorJuego = new ControladorJuego();
+        this.mensaje = new Boton(imagenes.mensaje_perder, 480/2, 320/2);
+        this.pausa = true;
     }
 
     reiniciarNivel() {
         this.iniciar();
-    }
-
-    comerSemillaGrande(x, y) {
-        this.controladorJuego.activarModoEscapando(500, this.enemigos);
-        this.ultimoEstadoJuego = estadosJuego.enemigosEscapando;
-        this.puntosImagenes.push(
-            new PuntosImagen(x, y, imagenes.puntos_10, 100));
-        this.controladorJuego.puntosNivel += 10;
+        this.mensaje = new Boton(imagenes.mensaje_perderVida, 480/2, 320/2);
+        this.pausa = true;
     }
 
     comerBala(x, y) {
         this.jugador.balas++;
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_1, 100));
+        this.controladorJuego.recolectablesRestantes--;
     }
 }

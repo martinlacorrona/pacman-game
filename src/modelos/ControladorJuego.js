@@ -14,11 +14,39 @@ class ControladorJuego {
         this.activarModoFinal = false;
 
         this.time = 0;
+
+        this.totalRecolectables = 0;
+        this.recolectablesRestantes = 0;
+        this.fueGeneradoBoss = false;
     }
 
     reiniciarNivel() {
         this.puntosNivel = 0;
         this.estadoJuego = estadosJuego.normal;
+        this.tiempoActivadoModoEscapando = 0;
+        this.activarModoFinal = false;
+        this.time = 0;
+        this.recolectablesRestantes = this.totalRecolectables;
+        this.fueGeneradoBoss = false;
+    }
+
+    pasarNivel() {
+        if(this.nivelActual === this.ultimoNivel)
+            this.nivelActual = -1; //HAS GANADO!
+        else
+            this.nivelActual++;
+
+        this.estadoJuego = estadosJuego.normal;
+        this.tiempoActivadoModoEscapando = 0;
+        this.activarModoFinal = false;
+        this.time = 0;
+        this.totalRecolectables = 0;
+        this.recolectablesRestantes = 0;
+        this.fueGeneradoBoss = false;
+
+        this.puntosTotal += this.puntosNivel;
+        this.puntosNivel = 0;
+
     }
 
     actualizar() {
@@ -27,6 +55,10 @@ class ControladorJuego {
         if(this.tiempoActivadoModoEscapando == 0) {
             this.estadoJuego = estadosJuego.normal;
         }
+    }
+
+    getPuntosTotales() {
+        return this.puntosNivel + this.puntosTotal;
     }
 
     activarModoEscapando(time, enemigos) {
@@ -46,5 +78,18 @@ class ControladorJuego {
         return false;
     }
 
+    isGenerarBossFinal() {
+        if(this.totalRecolectables / 2 > this.recolectablesRestantes &&
+            !this.fueGeneradoBoss) {
+                this.fueGeneradoBoss = true;
+                return true;
+        }
+    }
+
+    isGanar() {
+        if(this.recolectablesRestantes == 0 && this.totalRecolectables != 0)
+            return true;
+        return false;
+    }
 
 }
