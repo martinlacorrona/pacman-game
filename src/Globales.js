@@ -55,4 +55,6 @@ function getNextColorEnemigo() {
 var sizeBloque = 14;
 var visionEnemigoBasico = 10;
 
+var zonaMuertaMando = 0.5;
+
 

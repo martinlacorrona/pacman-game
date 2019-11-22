@@ -434,7 +434,7 @@ class GameLayer extends Layer {
     }
 
     comerSemillaGrande(x, y) {
-        this.controladorJuego.activarModoEscapando(1000, this.enemigos);
+        this.controladorJuego.activarModoEscapando(500, this.enemigos);
         this.ultimoEstadoJuego = estadosJuego.enemigosEscapando;
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_10, 100));

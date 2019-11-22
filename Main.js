@@ -57,9 +57,6 @@ function resize() {
     let escaladoAncho = parseFloat(window.innerWidth / defaultValueCanvasWidth);
     let escaladoAlto = parseFloat(window.innerHeight / defaultValueCanvasHeigth);
 
-    console.log(escaladoAncho + "/" + escaladoAlto)
-    console.log(window.innerWidth + "/" + window.innerHeight)
-
     escaladoMinimo = Math.min(escaladoAncho, escaladoAlto);
 
     canvas.width = defaultValueCanvasWidth*escaladoMinimo;

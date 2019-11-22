@@ -1,4 +1,4 @@
-console.log("Navegador admiteMandos: "+admiteMandos());
+//console.log("Navegador admiteMandos: "+admiteMandos());
 
 // Los que hay pulsados actualmente
 var botonesPulsados = [];
@@ -8,9 +8,9 @@ function admiteMandos() {
 }
 
 window.addEventListener("gamepadconnected", function(e) {
-    console.log("GamePad Conectado tipo: "+e.gamepad.id);
+    //console.log("GamePad Conectado tipo: "+e.gamepad.id);
     // Se podrían conectar varios, multijugador
-    console.log("Número: "+e.gamepad.index);
+    //console.log("Número: "+e.gamepad.index);
 
     // Leer botones del mando
     if ( navigator.getGamepads()[0] != null ){
@@ -35,27 +35,27 @@ function actualizarOrdenes(){
     // Los joystics van valores entre -1(izquierda) y 1(derecha)
     // El centro del joystick es 0
     // Float con 2 decimales
-    controles.moverX = parseFloat(gP1.axes[0]).toFixed( 2 );
 
-    if ( gP1.buttons[0].pressed){ // 1 es el botón B
+    //X
+    let valorXJoystickIzquierdo = gP1.axes[0];
+    if(valorXJoystickIzquierdo < zonaMuertaMando && valorXJoystickIzquierdo > -zonaMuertaMando)
+        valorXJoystickIzquierdo = 0;
+    controles.moverX = parseFloat(valorXJoystickIzquierdo).toFixed( 2 );
+
+    //Y
+    let valorYJoystickIzquierdo = gP1.axes[1] * (-1); //multiplicamos por -1 que estan invertidos
+    if(valorYJoystickIzquierdo < zonaMuertaMando && valorYJoystickIzquierdo > -zonaMuertaMando)
+        valorYJoystickIzquierdo = 0;
+    controles.moverY = parseFloat(valorYJoystickIzquierdo).toFixed( 2 );
+
+    if ( gP1.buttons[0].pressed){ // 1 es el botón A
         if ( botonesPulsados[0] == false ) {
             botonesPulsados[0] = true;
-            controles.moverY = 1;
-        }
-    } else {
-        botonesPulsados[0] = false;
-        controles.moverY = 0;
-    }
-
-    if ( gP1.buttons[2].pressed){ // 2 es el botón A
-        if ( botonesPulsados[2] == false ) {
-            botonesPulsados[2] = true
             controles.disparo = true;
             controles.continuar = true;
         }
     } else {
-        botonesPulsados[2] = false
+        botonesPulsados[0] = false;
         controles.disparo = false;
-        controles.continuar = false;
     }
 }
