@@ -64,7 +64,6 @@ class GameLayer extends Layer {
                 this.pausa = true;
                 this.controladorJuego = new ControladorJuego();
                 this.iniciar();
-                return;
             }
             this.iniciar();
             this.mensaje = new Boton(imagenes.mensaje_pasarDeNivel, 480/2, 320/2);
@@ -93,11 +92,9 @@ class GameLayer extends Layer {
         this.balas.valor = this.jugador.balas;
 
         if(this.jugador.estado == estados.muerto) {
-            if(this.controladorJuego.vidas == 0) {
-                this.perder();
-                return;
-            }
             this.reiniciarNivel();
+            if(this.controladorJuego.vidas == 0)
+                this.perder();
             return;
         }
 
