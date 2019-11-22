@@ -51,6 +51,10 @@ class GameLayer extends Layer {
 
         this.controladorJuego.actualizar();
 
+        if(this.controladorJuego.isEnableModoEscapandoFinal()) {
+            this.enemigos.forEach((item) => item.cambiarEstado(estados.escapandoFinal));
+        }
+
         if(this.controladorJuego.estadoJuego !== this.ultimoEstadoJuego &&
                 this.controladorJuego.estadoJuego === estadosJuego.normal) {
             this.enemigos.forEach((item) => item.cambiarEstado(estados.moviendo));
@@ -440,8 +444,7 @@ class GameLayer extends Layer {
     }
 
     comerSemillaGrande(x, y) {
-        this.enemigos.forEach((item) => item.cambiarEstado(estados.escapando));
-        this.controladorJuego.activarModoEscapando(1000);
+        this.controladorJuego.activarModoEscapando(1000, this.enemigos);
         this.ultimoEstadoJuego = estadosJuego.enemigosEscapando;
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_10, 100));

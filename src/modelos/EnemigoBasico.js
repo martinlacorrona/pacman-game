@@ -1,7 +1,7 @@
 class EnemigoBasico extends Enemigo {
 
     constructor(x, y) {
-        super(x, y, imagenes.enemigo);
+        super(x, y, imagenes.enemigo_basico_abajo_amarillo);
         this.estado = estados.moviendo;
 
         this.velocidad = 0.5;
@@ -13,17 +13,46 @@ class EnemigoBasico extends Enemigo {
         this.ultimaOrientacion = this.orientacion;
         this.ultimaOrientacionContrario = this.getOrientacionContraria(this.ultimaOrientacion);
 
-        this.aIdleDerecha = new Animacion(imagenes.enemigo_basico_derecha,
-            this.ancho, this.alto, 6*factorFotogramas, 2);
-        this.aIdleIzquierda = new Animacion(imagenes.enemigo_basico_izquierda,
-            this.ancho, this.alto, 6*factorFotogramas, 2);
-        this.aIdleArriba = new Animacion(imagenes.enemigo_basico_arriba,
-            this.ancho, this.alto, 6*factorFotogramas, 2);
-        this.aIdleAbajo = new Animacion(imagenes.enemigo_basico_abajo,
-            this.ancho, this.alto, 6*factorFotogramas, 2);
+        var animacionDerecha, animacionIzquierda, animacionArriba, animacionAbajo;
 
+        switch (getNextColorEnemigo()) {
+            case coloresEnemigos.amarillo:
+                animacionDerecha = imagenes.enemigo_basico_derecha_amarillo;
+                animacionIzquierda = imagenes.enemigo_basico_izquierda_amarillo;
+                animacionArriba = imagenes.enemigo_basico_arriba_amarillo;
+                animacionAbajo = imagenes.enemigo_basico_abajo_amarillo;
+                break;
+            case coloresEnemigos.verde:
+                animacionDerecha = imagenes.enemigo_basico_derecha_verde;
+                animacionIzquierda = imagenes.enemigo_basico_izquierda_verde;
+                animacionArriba = imagenes.enemigo_basico_arriba_verde;
+                animacionAbajo = imagenes.enemigo_basico_abajo_verde;
+                break;
+            case coloresEnemigos.rojo:
+                animacionDerecha = imagenes.enemigo_basico_derecha_rojo;
+                animacionIzquierda = imagenes.enemigo_basico_izquierda_rojo;
+                animacionArriba = imagenes.enemigo_basico_arriba_rojo;
+                animacionAbajo = imagenes.enemigo_basico_abajo_rojo;
+                break;
+            case coloresEnemigos.azul:
+                animacionDerecha = imagenes.enemigo_basico_derecha_azul;
+                animacionIzquierda = imagenes.enemigo_basico_izquierda_azul;
+                animacionArriba = imagenes.enemigo_basico_arriba_azul;
+                animacionAbajo = imagenes.enemigo_basico_abajo_azul;
+                break;
+        }
+        this.aIdleDerecha = new Animacion(animacionDerecha,
+            this.ancho, this.alto, 6*factorFotogramas, 2);
+        this.aIdleIzquierda = new Animacion(animacionIzquierda,
+            this.ancho, this.alto, 6*factorFotogramas, 2);
+        this.aIdleArriba = new Animacion(animacionArriba,
+            this.ancho, this.alto, 6*factorFotogramas, 2);
+        this.aIdleAbajo = new Animacion(animacionAbajo,
+            this.ancho, this.alto, 6*factorFotogramas, 2);
         this.aIdleEscapando = new Animacion(imagenes.enemigo_basico_escapando,
             this.ancho, this.alto, 6*factorFotogramas, 4);
+        this.aIdleEscapandoFinal = new Animacion(imagenes.enemigo_basico_escapando,
+            this.ancho, this.alto, 2*factorFotogramas, 4);
 
         // Ref a la animación actual
         this.updateAnimation();
@@ -90,6 +119,8 @@ class EnemigoBasico extends Enemigo {
             }
         } else if(this.estado == estados.escapando) {
             this.animacion = this.aIdleEscapando;
+        } else if(this.estado == estados.escapandoFinal) {
+            this.animacion = this.aIdleEscapandoFinal;
         }
     }
 
