@@ -1,6 +1,10 @@
 class ControladorJuego {
 
     constructor() {
+        this.reiniciarControlador();
+    }
+
+    reiniciarControlador() {
         this.vidas = 3;
         this.puntosNivel = 0;
         this.puntosTotal = 0;
@@ -16,7 +20,7 @@ class ControladorJuego {
         this.time = 0;
 
         this.totalRecolectables = 0;
-        this.recolectablesRestantes = 0;
+        this.recolectablesRestantes = 1;
         this.fueGeneradoBoss = false;
     }
 

@@ -42,9 +42,6 @@ class GameLayer extends Layer {
         this.ultimoEstadoJuego = estadosJuego.normal;
 
         this.cargarMapa("res/" + this.controladorJuego.nivelActual + ".txt");
-
-        this.controladorJuego.totalRecolectables = this.recolectables.length;
-        this.controladorJuego.recolectablesRestantes = this.recolectables.length;
     }
 
     actualizar (){
@@ -62,8 +59,7 @@ class GameLayer extends Layer {
                 this.puntos.y = 320/2;
                 this.puntos.dibujar();
                 this.pausa = true;
-                this.controladorJuego = new ControladorJuego();
-                this.iniciar();
+                this.controladorJuego.reiniciarControlador();
             }
             this.iniciar();
             this.mensaje = new Boton(imagenes.mensaje_pasarDeNivel, 480/2, 320/2);
@@ -289,22 +285,24 @@ class GameLayer extends Layer {
     }
 
     cargarMapa(ruta){
-        var fichero = new XMLHttpRequest();
+        let fichero = new XMLHttpRequest();
         fichero.open("GET", ruta, false);
 
         fichero.onreadystatechange = function () {
-            var texto = fichero.responseText;
-            var lineas = texto.split('\n');
+            let texto = fichero.responseText;
+            let lineas = texto.split('\n');
             this.anchoMapa = (lineas[0].length-1) * 40;
-            for (var i = 0; i < lineas.length; i++){
-                var linea = lineas[i];
-                for (var j = 0; j < linea.length; j++){
-                    var simbolo = linea[j];
-                    var x = (40/2*factorRedimension) + j * (40*factorRedimension); // x central
-                    var y = (40/2*factorRedimension) + i * (40*factorRedimension); // y de abajo
+            for (let i = 0; i < lineas.length; i++){
+                let linea = lineas[i];
+                for (let j = 0; j < linea.length; j++){
+                    let simbolo = linea[j];
+                    let x = (40/2*factorRedimension) + j * (40*factorRedimension); // x central
+                    let y = (40/2*factorRedimension) + i * (40*factorRedimension); // y de abajo
                     this.cargarObjetoMapa(simbolo,x,y);
                 }
             }
+            this.controladorJuego.totalRecolectables = this.recolectables.length;
+            this.controladorJuego.recolectablesRestantes = this.recolectables.length;
         }.bind(this);
 
         fichero.send(null);
@@ -461,7 +459,7 @@ class GameLayer extends Layer {
     }
 
     perder() {
-        this.controladorJuego = new ControladorJuego();
+        this.controladorJuego.reiniciarControlador();
         this.mensaje = new Boton(imagenes.mensaje_perder, 480/2, 320/2);
         this.pausa = true;
     }
