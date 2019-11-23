@@ -9,6 +9,8 @@ class GameLayer extends Layer {
 
         this.controladorJuego = new ControladorJuego();
 
+        this.matrizMapa = Array.from(Array(22), () => new Array(23));
+
         this.iniciar();
     }
 
@@ -129,8 +131,8 @@ class GameLayer extends Layer {
 
         this.recolectables.forEach((item) => item.actualizar());
         this.jugador.actualizar();
-        this.enemigos.forEach((item) => item.actualizar(this.jugador, this.espacio));
-        this.enemigosBoss.forEach((item) => item.actualizar(this.jugador, this.espacio));
+        this.enemigos.forEach((item) => item.actualizar(this.jugador));
+        this.enemigosBoss.forEach((item) => item.actualizar(this.jugador, this.matrizMapa));
         this.disparosJugador.forEach((item) => item.actualizar());
 
         // colisiones: jugador - enemigo basico
@@ -331,6 +333,7 @@ class GameLayer extends Layer {
                     let x = (40/2*factorRedimension) + j * (40*factorRedimension); // x central
                     let y = (40/2*factorRedimension) + i * (40*factorRedimension); // y de abajo
                     this.cargarObjetoMapa(simbolo,x,y);
+                    this.cargarObjetoMatrizMapa(simbolo,i,j);
                 }
             }
             this.controladorJuego.totalRecolectables = this.recolectables.length;
@@ -419,6 +422,15 @@ class GameLayer extends Layer {
                 this.espacio.agregarCuerpoDinamico(bloqueTeletranporteIzquierda);
 
                 break;
+        }
+    }
+
+    cargarObjetoMatrizMapa(simbolo, i, j) {
+        switch (simbolo) {
+            case "#":
+                this.matrizMapa[i][j] = "#";
+                break;
+
         }
     }
 

@@ -8,6 +8,9 @@ class EnemigoBoss extends Enemigo {
 
         this.vidas = 3;
 
+        this.matrizWaveFront = [[]];
+
+
         //gestionar la invencibilidad
         this.invencible = false;
         this.tiempoInvencible = 0;
@@ -52,7 +55,7 @@ class EnemigoBoss extends Enemigo {
         }
     }
 
-    actualizar(jugador, espacio) {
+    actualizar(jugador, matrizMapa) {
         if (this.tiempoInvencible > 0) {
             this.tiempoInvencible--;
         } else {
@@ -60,9 +63,11 @@ class EnemigoBoss extends Enemigo {
         }
 
         if(this.estado != estados.esperando && !this.isInvencible()) {
+            if(this.matrizMapa == undefined)
+                this.generarMatrizMapa();
             super.actualizar();
 
-            this.chequearPosicionJugador(jugador, espacio);
+            this.calcularMejorMoviemiento(jugador, matrizMapa);
 
             this.actualizarAnimacionVida();
 
@@ -111,7 +116,7 @@ class EnemigoBoss extends Enemigo {
         }
     }
 
-    chequearPosicionJugador(jugador, espacio) {
+    calcularMejorMoviemiento(jugador, matrizMapa) {
         //si ve al jugador
         let orientacionFinal = undefined;
 

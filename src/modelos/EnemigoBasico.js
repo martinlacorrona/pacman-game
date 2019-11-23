@@ -62,7 +62,7 @@ class EnemigoBasico extends Enemigo {
     actualizar(jugador, espacio) {
         super.actualizar();
 
-        this.chequearPosicionJugador(jugador, espacio);
+        this.calcularMejorMovimiento(jugador, espacio);
 
         if (this.estado != estados.muriendo && this.estado != estados.muerto) {
             if (this.vx == 0 && this.vy == 0 && this.orientacion != undefined) { //SE HA PARADO
@@ -105,7 +105,7 @@ class EnemigoBasico extends Enemigo {
         }
     }
 
-    chequearPosicionJugador(jugador) {
+    calcularMejorMovimiento(jugador) {
         //si ve al jugador
         let orientacionFinal = undefined;
 
