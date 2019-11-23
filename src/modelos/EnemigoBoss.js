@@ -44,21 +44,21 @@ class EnemigoBoss extends Enemigo {
             } else {
                 this.animacion.dibujar(this.x, this.y);
             }
+            //TODO: dibujar encima aqui los puntos de vida restantes
+            //TODO: al actualizar en funcion de los puntos de vida que se cambie la supuesta "animacion"
+            //TODO: crear la imagen desde gimp del propio enemigo, borrarlo y dibujarlo encima
         }
     }
 
     actualizar(jugador, espacio) {
-        console.log(this.vidas)
-        if(this.estado != estados.esperando) {
+        if (this.tiempoInvencible > 0) {
+            this.tiempoInvencible--;
+        } else {
+            this.invencible = false;
+        }
+        
+        if(this.estado != estados.esperando && !this.isInvencible()) {
             super.actualizar();
-
-
-
-            if (this.tiempoInvencible > 0) {
-                this.tiempoInvencible--;
-            } else {
-                this.invencible = false;
-            }
 
             this.chequearPosicionJugador(jugador, espacio);
 
@@ -101,6 +101,9 @@ class EnemigoBoss extends Enemigo {
                 this.vx = 0;
                 this.vy = 0;
             }
+        } else if(this.isInvencible()) {
+            this.vx = 0;
+            this.vy = 0;
         }
     }
 
@@ -158,7 +161,7 @@ class EnemigoBoss extends Enemigo {
             }
 
             //Se añade mas tiempo si se le sigue matando...
-            this.tiempoInvencible = 500; //activamos el modo invencible
+            this.tiempoInvencible = 250; //activamos el modo invencible
             this.invencible = true;
         }
     }

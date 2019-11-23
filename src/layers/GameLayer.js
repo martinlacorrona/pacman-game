@@ -155,14 +155,16 @@ class GameLayer extends Layer {
         for (let i=0; i < this.enemigosBoss.length; i++){
             if (this.jugador.colisiona(this.enemigosBoss[i]) && this.enemigosBoss[i].estado != estados.muerto
                 && this.enemigosBoss[i].estado != estados.muriendo) {
-                if(this.controladorJuego.estadoJuego === estadosJuego.normal) {
+                if(this.enemigosBoss[i].estado != estados.escapando
+                        && this.enemigosBoss[i].estado != estados.escapandoFinal) {
                     if (this.jugador.estado != estados.muerto && this.jugador.estado != estados.muriendo &&
                         !this.enemigosBoss[i].isInvencible()) {
                         this.controladorJuego.vidas--;
                         this.controladorJuego.reiniciarNivel();
                         this.jugador.golpeado();
                     }
-                } else if(this.controladorJuego.estadoJuego === estadosJuego.enemigosEscapando) {
+                } else if(this.enemigosBoss[i].estado == estados.escapandoFinal ||
+                            this.enemigosBoss[i].estado == estados.escapando) {
                     //Esta en modo escapando
                     this.golpearBoss(this.enemigosBoss[i], i);
                 }

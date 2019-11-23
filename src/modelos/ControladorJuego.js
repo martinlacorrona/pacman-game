@@ -72,7 +72,7 @@ class ControladorJuego {
 
         enemigos.forEach((item) => item.cambiarEstado(estados.escapando));
         enemigosBoss.forEach((item) => {
-            if (item.estado != estados.esperando)
+            if (item.estado != estados.esperando && !item.isInvencible())
                 item.cambiarEstado(estados.escapando)
         });
         this.activarModoFinal = true;
