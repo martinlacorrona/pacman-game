@@ -43,6 +43,10 @@ var imagenes = {
     enemigo_boss_derecha: "res/enemigo-boss-derecha.png",
     enemigo_boss_izquierda: "res/enemigo-boss-izquierda.png",
 
+    enemigo_boss_3_vidas: "res/enemigo-boss-3-vidas.png",
+    enemigo_boss_2_vidas: "res/enemigo-boss-2-vidas.png",
+    enemigo_boss_1_vidas: "res/enemigo-boss-1-vidas.png",
+
     /** PUNTOS **/
     puntos_1: "res/1pt.png",
     puntos_10: "res/10pts.png",

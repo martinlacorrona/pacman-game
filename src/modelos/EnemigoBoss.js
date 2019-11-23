@@ -4,7 +4,7 @@ class EnemigoBoss extends Enemigo {
         super(x, y, imagenes.enemigo_basico_abajo_amarillo);
         this.estado = estados.esperando;
 
-        this.velocidad = 0.25;
+        this.velocidad = 1;
 
         this.vidas = 3;
 
@@ -31,6 +31,9 @@ class EnemigoBoss extends Enemigo {
         this.aIdleEscapandoFinal = new Animacion(imagenes.enemigo_basico_escapando,
             this.ancho, this.alto, 2*factorFotogramas, 4);
 
+        this.animacionVidas = new Animacion(imagenes.enemigo_boss_3_vidas,
+            this.ancho, this.alto, 2*factorFotogramas, 1);
+
         // Ref a la animación actual
         this.updateAnimation();
     }
@@ -40,13 +43,12 @@ class EnemigoBoss extends Enemigo {
             if (this.tiempoInvencible > 0) {
                 contexto.globalAlpha = 0.5;
                 this.animacion.dibujar(this.x, this.y);
+                this.animacionVidas.dibujar(this.x, this.y);
                 contexto.globalAlpha = 1;
             } else {
                 this.animacion.dibujar(this.x, this.y);
+                this.animacionVidas.dibujar(this.x, this.y);
             }
-            //TODO: dibujar encima aqui los puntos de vida restantes
-            //TODO: al actualizar en funcion de los puntos de vida que se cambie la supuesta "animacion"
-            //TODO: crear la imagen desde gimp del propio enemigo, borrarlo y dibujarlo encima
         }
     }
 
@@ -56,11 +58,13 @@ class EnemigoBoss extends Enemigo {
         } else {
             this.invencible = false;
         }
-        
+
         if(this.estado != estados.esperando && !this.isInvencible()) {
             super.actualizar();
 
             this.chequearPosicionJugador(jugador, espacio);
+
+            this.actualizarAnimacionVida();
 
             if (this.estado != estados.muriendo && this.estado != estados.muerto) {
                 if (this.vx == 0 && this.vy == 0 && this.orientacion != undefined) { //SE HA PARADO
@@ -161,8 +165,25 @@ class EnemigoBoss extends Enemigo {
             }
 
             //Se añade mas tiempo si se le sigue matando...
-            this.tiempoInvencible = 250; //activamos el modo invencible
+            this.tiempoInvencible = 500; //activamos el modo invencible
             this.invencible = true;
+        }
+    }
+
+    actualizarAnimacionVida() {
+        switch (this.vidas) {
+            case 3:
+                this.animacionVidas = new Animacion(imagenes.enemigo_boss_3_vidas,
+                    this.ancho, this.alto, 2*factorFotogramas, 1);
+                break;
+            case 2:
+                this.animacionVidas = new Animacion(imagenes.enemigo_boss_2_vidas,
+                    this.ancho, this.alto, 2*factorFotogramas, 1);
+                break;
+            case 1:
+                this.animacionVidas = new Animacion(imagenes.enemigo_boss_1_vidas,
+                    this.ancho, this.alto, 2*factorFotogramas, 1);
+                break;
         }
     }
 }
