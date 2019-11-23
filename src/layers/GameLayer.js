@@ -24,6 +24,8 @@ class GameLayer extends Layer {
 
         this.enemigos = [];
 
+        this.enemigosBoss = [];
+
         this.recolectables = [];
         this.disparosJugador = [];
 
@@ -68,16 +70,23 @@ class GameLayer extends Layer {
 
         if(this.controladorJuego.isEnableModoEscapandoFinal()) {
             this.enemigos.forEach((item) => item.cambiarEstado(estados.escapandoFinal));
+            this.enemigosBoss.forEach((item) => {
+                if(item.estado == estados.escapando)
+                  item.cambiarEstado(estados.escapandoFinal);
+                });
         }
 
         if(this.controladorJuego.isGenerarBossFinal()) {
-            //TODO: deberemos tener al boss ya creado, y ponerlo en estado activo, que se empiece a pintar mover y demas.
-            console.log("GENERAR BOSS FINAL!!")
+            this.enemigosBoss.forEach((item) => item.cambiarEstado(estados.moviendo));
         }
 
         if(this.controladorJuego.estadoJuego !== this.ultimoEstadoJuego &&
                 this.controladorJuego.estadoJuego === estadosJuego.normal) {
             this.enemigos.forEach((item) => item.cambiarEstado(estados.moviendo));
+            this.enemigosBoss.forEach((item) => {
+                if(item.estado == estados.escapandoFinal)
+                    item.cambiarEstado(estados.moviendo);
+            });
             this.ultimoEstadoJuego = this.controladorJuego.estadoJuego;
         }
 
@@ -121,10 +130,11 @@ class GameLayer extends Layer {
         this.recolectables.forEach((item) => item.actualizar());
         this.jugador.actualizar();
         this.enemigos.forEach((item) => item.actualizar(this.jugador, this.espacio));
+        this.enemigosBoss.forEach((item) => item.actualizar(this.jugador, this.espacio));
         this.disparosJugador.forEach((item) => item.actualizar());
 
-        // colisiones
-        for (var i=0; i < this.enemigos.length; i++){
+        // colisiones: jugador - enemigo basico
+        for (let i=0; i < this.enemigos.length; i++){
             if (this.jugador.colisiona(this.enemigos[i]) && this.enemigos[i].estado != estados.muerto
                         && this.enemigos[i].estado != estados.muriendo) {
                 if(this.controladorJuego.estadoJuego === estadosJuego.normal) {
@@ -141,9 +151,27 @@ class GameLayer extends Layer {
             }
         }
 
+        // colisiones: jugador - enemigo boss
+        for (let i=0; i < this.enemigosBoss.length; i++){
+            if (this.jugador.colisiona(this.enemigosBoss[i]) && this.enemigosBoss[i].estado != estados.muerto
+                && this.enemigosBoss[i].estado != estados.muriendo) {
+                if(this.controladorJuego.estadoJuego === estadosJuego.normal) {
+                    if (this.jugador.estado != estados.muerto && this.jugador.estado != estados.muriendo &&
+                        !this.enemigosBoss[i].isInvencible()) {
+                        this.controladorJuego.vidas--;
+                        this.controladorJuego.reiniciarNivel();
+                        this.jugador.golpeado();
+                    }
+                } else if(this.controladorJuego.estadoJuego === estadosJuego.enemigosEscapando) {
+                    //Esta en modo escapando
+                    this.golpearBoss(this.enemigosBoss[i], i);
+                }
+            }
+        }
+
         // colisiones , disparoJugador - enemigo
-        for (var i=0; i < this.disparosJugador.length; i++){
-            for (var j=0; j < this.enemigos.length; j++){
+        for (let i=0; i < this.disparosJugador.length; i++) {
+            for (let j=0; j < this.enemigos.length; j++){ //ENEMIGO
                 if (this.disparosJugador[i] != null &&
                     this.enemigos[j] != null &&
                     this.disparosJugador[i].colisiona(this.enemigos[j])) {
@@ -155,6 +183,19 @@ class GameLayer extends Layer {
                     this.disparosJugador.splice(i, 1);
                     i = i-1;
                     this.enemigos[j].impactado();
+                }
+            }
+            for (let j=0; j < this.enemigosBoss.length; j++){ //ENEMIGO BOSS
+                if (this.disparosJugador[i] != null &&
+                    this.enemigosBoss[j] != null &&
+                    this.disparosJugador[i].colisiona(this.enemigosBoss[j])) {
+
+                    this.golpearBoss(this.enemigosBoss[j], j);
+
+                    this.espacio
+                        .eliminarCuerpoDinamico(this.disparosJugador[i]);
+                    this.disparosJugador.splice(i, 1);
+                    i = i-1;
                 }
             }
         }
@@ -193,21 +234,9 @@ class GameLayer extends Layer {
                 }
             }
         }
-
-        // Enemigos muertos fuera del juego
-        for (var j=0; j < this.enemigos.length; j++){
-            if ( this.enemigos[j] != null &&
-                this.enemigos[j].estado == estados.muerto ) {
-
-                this.espacio
-                    .eliminarCuerpoDinamico(this.enemigos[j]);
-                this.enemigos.splice(j, 1);
-                j = j-1;
-            }
-        }
     }
 
-    dibujar (){
+    dibujar() {
 
         this.fondo.dibujar();
 
@@ -219,6 +248,7 @@ class GameLayer extends Layer {
         this.jugador.dibujar();
 
         this.enemigos.forEach((item) => item.dibujar());
+        this.enemigosBoss.forEach((item) => item.dibujar());
 
         //HUD
         this.fondoPuntos.dibujar();
@@ -359,6 +389,15 @@ class GameLayer extends Layer {
 
                 break;
 
+            case "F":
+                let enemigoBoss = new EnemigoBoss(x,y);
+                enemigoBoss.y = enemigoBoss.y - enemigoBoss.alto/2;
+                // modificación para empezar a contar desde el suelo
+                this.enemigosBoss.push(enemigoBoss);
+                this.espacio.agregarCuerpoDinamico(enemigoBoss);
+
+                break;
+
             case ">":
                 let bloqueTeletranporteDerecha = new BloqueTeletransporteDerecha(x,y);
                 bloqueTeletranporteDerecha.y = bloqueTeletranporteDerecha.y - bloqueTeletranporteDerecha.alto/2;
@@ -437,7 +476,7 @@ class GameLayer extends Layer {
     }
 
     comerSemillaGrande(x, y) {
-        this.controladorJuego.activarModoEscapando(500, this.enemigos);
+        this.controladorJuego.activarModoEscapando(500, this.enemigos, this.enemigosBoss);
         this.ultimoEstadoJuego = estadosJuego.enemigosEscapando;
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_10, 100));
@@ -475,5 +514,22 @@ class GameLayer extends Layer {
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_1, 100));
         this.controladorJuego.recolectablesRestantes--;
+    }
+
+    golpearBoss(boss, posArray) {
+        let estadoBossAntesGolpear = boss.isInvencible();
+        boss.golpear();
+        //chequeamos vidas
+        if(!estadoBossAntesGolpear) {
+            this.puntosImagenes.push(
+                new PuntosImagen(boss.x, boss.y, imagenes.puntos_400, 100));
+            this.controladorJuego.puntosNivel += 400;
+        }
+
+        //Si lo matamos...
+        if(boss.vidas == 0) {
+            //Lo borramos del array
+            this.enemigosBoss.splice(posArray, 1);
+        }
     }
 }

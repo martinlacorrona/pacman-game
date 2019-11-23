@@ -19,6 +19,7 @@ estados.disparando = 6;
 estados.impactado = 7;
 estados.escapando = 8;
 estados.escapandoFinal = 9;
+estados.esperando = 10;
 
 var orientaciones = {};
 orientaciones.derecha = 0;

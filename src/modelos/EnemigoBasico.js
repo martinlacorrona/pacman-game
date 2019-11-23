@@ -7,13 +7,14 @@ class EnemigoBasico extends Enemigo {
         this.velocidad = 0.5;
 
 
-        //Empieza con una orintacion aleatoria.
-        this.orientacion = Math.floor(Math.random() * 4);;
+        //Empieza con una orientacion aleatoria.
+        this.orientacion = Math.floor(Math.random() * 4);
+
         //Guardamos el estado de la ultima orientacion
         this.ultimaOrientacion = this.orientacion;
         this.ultimaOrientacionContrario = this.getOrientacionContraria(this.ultimaOrientacion);
 
-        var animacionDerecha, animacionIzquierda, animacionArriba, animacionAbajo;
+        let animacionDerecha, animacionIzquierda, animacionArriba, animacionAbajo;
 
         switch (getNextColorEnemigo()) {
             case coloresEnemigos.amarillo:
@@ -104,49 +105,7 @@ class EnemigoBasico extends Enemigo {
         }
     }
 
-    updateAnimation() {
-        if(this.estado == estados.moviendo) {
-            switch (this.orientacion) {
-                case orientaciones.derecha:
-                    this.animacion = this.aIdleDerecha;
-                    break;
-                case orientaciones.izquierda:
-                    this.animacion = this.aIdleIzquierda;
-                    break;
-                case orientaciones.arriba:
-                    this.animacion = this.aIdleArriba;
-                    break;
-                case orientaciones.abajo:
-                    this.animacion = this.aIdleAbajo;
-                    break;
-            }
-        } else if(this.estado == estados.escapando) {
-            this.animacion = this.aIdleEscapando;
-        } else if(this.estado == estados.escapandoFinal) {
-            this.animacion = this.aIdleEscapandoFinal;
-        }
-    }
-
-    getOrientacionContraria(orientacion) {
-        switch (orientacion) {
-            case orientaciones.derecha:
-                return orientaciones.izquierda;
-            case orientaciones.izquierda:
-                return orientaciones.derecha;
-            case orientaciones.arriba:
-                return orientaciones.abajo;
-            case orientaciones.abajo:
-                return orientaciones.arriba;
-        }
-    }
-
-    cambiarEstado(estado) {
-        this.orientacion =  this.getOrientacionContraria(this.orientacion);
-        this.estado = estado;
-        this.updateAnimation();
-    }
-
-    chequearPosicionJugador(jugador, espacio) {
+    chequearPosicionJugador(jugador) {
         //si ve al jugador
         let orientacionFinal = undefined;
 

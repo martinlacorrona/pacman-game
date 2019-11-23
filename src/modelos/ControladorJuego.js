@@ -65,12 +65,16 @@ class ControladorJuego {
         return this.puntosNivel + this.puntosTotal;
     }
 
-    activarModoEscapando(time, enemigos) {
+    activarModoEscapando(time, enemigos, enemigosBoss) {
         this.time = time;
         this.tiempoActivadoModoEscapando = time;
         this.estadoJuego = estadosJuego.enemigosEscapando;
 
         enemigos.forEach((item) => item.cambiarEstado(estados.escapando));
+        enemigosBoss.forEach((item) => {
+            if (item.estado != estados.esperando)
+                item.cambiarEstado(estados.escapando)
+        });
         this.activarModoFinal = true;
     }
 

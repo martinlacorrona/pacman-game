@@ -38,10 +38,10 @@ var imagenes = {
     enemigo_basico_izquierda_amarillo: "res/enemigo-basico-izquierda-amarillo.png",
     enemigo_basico_escapando: "res/enemigo-basico-escapando.png",
 
-    enemigo_boss_abajo_rojo: "res/enemigo-boss-abajo.png",
-    enemigo_boss_arriba_rojo: "res/enemigo-boss-arriba.png",
-    enemigo_boss_derecha_rojo: "res/enemigo-boss-derecha.png",
-    enemigo_boss_izquierda_rojo: "res/enemigo-boss-izquierda.png",
+    enemigo_boss_abajo: "res/enemigo-boss-abajo.png",
+    enemigo_boss_arriba: "res/enemigo-boss-arriba.png",
+    enemigo_boss_derecha: "res/enemigo-boss-derecha.png",
+    enemigo_boss_izquierda: "res/enemigo-boss-izquierda.png",
 
     /** PUNTOS **/
     puntos_1: "res/1pt.png",

@@ -7,19 +7,57 @@ class Enemigo extends Modelo {
         this.alto = 40*factorRedimension;
     }
 
-    actualizar (){
+    actualizar() {
         this.animacion.actualizar();
     }
 
-    dibujar (scrollX, scrollY){
-        scrollX = scrollX || 0;
-        scrollY = scrollY || 0;
-        this.animacion.dibujar(this.x - scrollX, this.y - scrollY);
+    dibujar() {
+        this.animacion.dibujar(this.x, this.y);
     }
 
     impactado(){
         this.estado = estados.muerto;
     }
 
-    disparar() {}
+    getOrientacionContraria(orientacion) {
+        switch (orientacion) {
+            case orientaciones.derecha:
+                return orientaciones.izquierda;
+            case orientaciones.izquierda:
+                return orientaciones.derecha;
+            case orientaciones.arriba:
+                return orientaciones.abajo;
+            case orientaciones.abajo:
+                return orientaciones.arriba;
+        }
+    }
+
+    updateAnimation() {
+        if(this.estado == estados.moviendo) {
+            switch (this.orientacion) {
+                case orientaciones.derecha:
+                    this.animacion = this.aIdleDerecha;
+                    break;
+                case orientaciones.izquierda:
+                    this.animacion = this.aIdleIzquierda;
+                    break;
+                case orientaciones.arriba:
+                    this.animacion = this.aIdleArriba;
+                    break;
+                case orientaciones.abajo:
+                    this.animacion = this.aIdleAbajo;
+                    break;
+            }
+        } else if(this.estado == estados.escapando) {
+            this.animacion = this.aIdleEscapando;
+        } else if(this.estado == estados.escapandoFinal) {
+            this.animacion = this.aIdleEscapandoFinal;
+        }
+    }
+
+    cambiarEstado(estado) {
+        this.orientacion =  this.getOrientacionContraria(this.orientacion);
+        this.estado = estado;
+        this.updateAnimation();
+    }
 }
