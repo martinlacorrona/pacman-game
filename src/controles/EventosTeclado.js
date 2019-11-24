@@ -26,6 +26,9 @@ function onKeyDown( event) {
             case 37:
                 controles.moverX = -1;
                 break;
+            case 27:
+                controles.pausa = true;
+                break;
         }
 
     }

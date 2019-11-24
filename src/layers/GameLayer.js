@@ -16,8 +16,10 @@ class GameLayer extends Layer {
 
     iniciar() {
         this.botonDisparo = new Boton(imagenes.boton_disparo,480*0.87,320*0.55, 0.5, 0.5);
+        this.botonPausa = new Boton(imagenes.boton_pausa,480*0.97,320*0.065, 0.5, 0.5);
         this.pad = new Pad(480*0.75,320*0.8);
-        this.fondo = new Fondo(imagenes.fondo, 480*0.5,320*0.5)
+        this.fondo = new Fondo(imagenes.fondo, 480*0.5,320*0.5);
+        this.gui = new Fondo(imagenes.gui, 480*0.5,320*0.5);
 
         this.espacio = new Espacio(0);
 
@@ -33,15 +35,15 @@ class GameLayer extends Layer {
 
         this.puntosImagenes = [];
 
-        this.fondoPuntos = new Fondo(imagenes.icono_puntos, 480*0.85,320*0.05);
+        this.puntos = new Texto(this.controladorJuego.getPuntosTotales(),480*0.87,320*0.215);
 
-        this.puntos = new Texto(this.controladorJuego.getPuntosTotales(),480*0.9,320*0.07);
+        this.vidas = new Texto(this.controladorJuego.vidas, 480*0.85, 320*0.265);
 
-        this.vidas = new Texto(this.controladorJuego.vidas, 480*0.8, 320*0.07);
+        this.balas = new Texto(0, 480*0.85, 320*0.3175);
 
-        this.balas = new Texto(0, 480*0.7, 320*0.07);
+        this.nivel = new Texto(this.controladorJuego.nivelActual + 1, 480*0.84, 320*0.415);
 
-        this.nivel = new Texto(this.controladorJuego.nivelActual + 1, 480*0.7, 320*0.20);
+        this.jefeFinalGenerado = new Texto("JEFE GENERADO", 480*0.765, 320*0.45, "red");
 
         this.ultimoEstadoJuego = estadosJuego.normal;
 
@@ -249,6 +251,7 @@ class GameLayer extends Layer {
     dibujar() {
 
         this.fondo.dibujar();
+        this.gui.dibujar();
 
         this.recolectables.forEach((item) => item.dibujar());
         this.puntosImagenes.forEach((item) => item.dibujar());
@@ -261,11 +264,13 @@ class GameLayer extends Layer {
         this.enemigosBoss.forEach((item) => item.dibujar());
 
         //HUD
-        this.fondoPuntos.dibujar();
         this.puntos.dibujar();
         this.vidas.dibujar();
         this.balas.dibujar();
         this.nivel.dibujar();
+        this.botonPausa.dibujar();
+        if(this.controladorJuego.fueGeneradoBoss)
+            this.jefeFinalGenerado.dibujar();
         if ( !this.pausa && entrada == entradas.pulsaciones) {
             this.botonDisparo.dibujar();
             this.pad.dibujar();
@@ -280,6 +285,12 @@ class GameLayer extends Layer {
     }
 
     procesarControles( ){
+        if(controles.pausa) {
+            this.mensaje = new Boton(imagenes.mensaje_pausa, 480/2, 320/2);
+            controles.pausa = false;
+            this.pausa = true;
+        }
+
         if (controles.continuar){
             controles.continuar = false;
             this.pausa = false;
@@ -468,11 +479,13 @@ class GameLayer extends Layer {
     calcularPulsaciones(pulsaciones){
         // Suponemos botones no estan pulsados
         this.botonDisparo.pulsado = false;
+        this.botonPausa.pulsado = false;
         // suponemos que el pad está sin tocar
         controles.moverX = 0;
         controles.moverY = 0;
         // Suponemos a false
         controles.continuar = false;
+        controles.pausa = false;
 
 
         for(var i=0; i < pulsaciones.length; i++) {
@@ -504,8 +517,16 @@ class GameLayer extends Layer {
                     controles.disparo = true;
                 }
             }
+            if (this.botonPausa.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
+                this.botonPausa.pulsado = true;
+                if ( pulsaciones[i].tipo == tipoPulsacion.inicio) {
+                    controles.pausa = true;
+                }
+            }
 
         }
+        if(controles.pausa)
+            controles.continuar = false;
 
         // No pulsado - Boton Disparo
         if ( !this.botonDisparo.pulsado ){

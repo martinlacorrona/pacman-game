@@ -57,6 +57,7 @@ var imagenes = {
     puntos_400: "res/400pts.png",
 
     /** GUI **/
+    gui : "res/gui.png",
     icono_vidas : "res/vida.png",
     icono_puntos : "res/icono_puntos.png",
     menu_fondo : "res/menuImg.png",
