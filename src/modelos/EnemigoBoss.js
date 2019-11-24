@@ -46,16 +46,18 @@ class EnemigoBoss extends Enemigo {
             if (this.tiempoInvencible > 0) {
                 contexto.globalAlpha = 0.5;
                 this.animacion.dibujar(this.x, this.y);
-                this.animacionVidas.dibujar(this.x, this.y);
+                this.animacionVidas.dibujar(this.x, this.y - 10); //ponga las vidas encima
                 contexto.globalAlpha = 1;
             } else {
                 this.animacion.dibujar(this.x, this.y);
-                this.animacionVidas.dibujar(this.x, this.y);
+                this.animacionVidas.dibujar(this.x, this.y - 10); //ponga las vidas encima
             }
         }
     }
 
     actualizar(jugador, matrizMapa) {
+        this.actualizarAnimacionVida();
+
         if (this.tiempoInvencible > 0) {
             this.tiempoInvencible--;
         } else {
@@ -87,8 +89,6 @@ class EnemigoBoss extends Enemigo {
                         break;
                 }
             //}
-
-            this.actualizarAnimacionVida();
 
             if (this.estado == estados.muriendo && this.estado == estados.muerto) {
                 this.vx = 0;
