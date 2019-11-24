@@ -64,6 +64,7 @@ var sizeMapaAlto = 21;
 
 var velocidadEnemigoJefeNormal = 1;
 var velocidadEnemigoJefeEscapando = 0.75;
+var velocidadEnemigoJefeInvecible = 0.1;
 
 var ultimoNivel = 2;
 

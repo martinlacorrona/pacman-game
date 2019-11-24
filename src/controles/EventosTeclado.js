@@ -16,15 +16,19 @@ function onKeyDown( event) {
                 break;
             case 38:
                 controles.moverY = 1;
+                controles.moverX = 0;
                 break;
             case 40:
                 controles.moverY = -1;
+                controles.moverX = 0;
                 break;
             case 39:
                 controles.moverX = 1;
+                controles.moverY = 0;
                 break;
             case 37:
                 controles.moverX = -1;
+                controles.moverY = 0;
                 break;
             case 27:
                 controles.pausa = true;
@@ -43,26 +47,6 @@ function onKeyUp( event) {
         case 32:
             controles.disparo = false;
             controles.continuar = false;
-            break;
-        case 38:
-            if ( controles.moverY == 1 ){
-                controles.moverY = 0;
-            }
-            break;
-        case 40:
-            if ( controles.moverY == -1 ){
-                controles.moverY = 0;
-            }
-            break;
-        case 39:
-            if ( controles.moverX == 1 ){
-                controles.moverX = 0;
-            }
-            break;
-        case 37:
-            if ( controles.moverX == -1 ){
-                controles.moverX = 0;
-            }
             break;
     }
 

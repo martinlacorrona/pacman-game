@@ -66,37 +66,37 @@ class EnemigoBoss extends Enemigo {
         this.lastUpdate++;
 
         if(this.estado != estados.esperando && !this.isInvencible()) {
+            if(this.estado != estados.escapando && this.estado != estados.escapandoFinal)
+                this.velocidad = velocidadEnemigoJefeNormal;
             super.actualizar();
 
-            //if(this.lastUpdate % 30 == 0) {
-                this.calcularMejorMovimiento(jugador, matrizMapa);
-                switch (this.orientacion) {
-                    case orientaciones.derecha:
-                        this.vx = this.velocidad * 1;
-                        this.vy = 0;
-                        break;
-                    case orientaciones.izquierda:
-                        this.vx = this.velocidad * -1;
-                        this.vy = 0;
-                        break;
-                    case orientaciones.arriba:
-                        this.vx = 0;
-                        this.vy = this.velocidad * -1;
-                        break;
-                    case orientaciones.abajo:
-                        this.vx = 0;
-                        this.vy = this.velocidad * 1;
-                        break;
-                }
-            //}
+            this.calcularMejorMovimiento(jugador, matrizMapa);
 
             if (this.estado == estados.muriendo && this.estado == estados.muerto) {
                 this.vx = 0;
                 this.vy = 0;
             }
         } else if(this.isInvencible()) {
-            this.vx = 0;
-            this.vy = 0;
+            this.velocidad = velocidadEnemigoJefeInvecible;
+        }
+
+        switch (this.orientacion) {
+            case orientaciones.derecha:
+                this.vx = this.velocidad * 1;
+                this.vy = 0;
+                break;
+            case orientaciones.izquierda:
+                this.vx = this.velocidad * -1;
+                this.vy = 0;
+                break;
+            case orientaciones.arriba:
+                this.vx = 0;
+                this.vy = this.velocidad * -1;
+                break;
+            case orientaciones.abajo:
+                this.vx = 0;
+                this.vy = this.velocidad * 1;
+                break;
         }
     }
 
