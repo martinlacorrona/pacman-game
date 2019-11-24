@@ -80,8 +80,13 @@ var sonidos = {
     pacman_muere: "res/sounds/pacman_death.wav",
     pacman_comeEnemigo:  "res/sounds/pacman_eatenemy.wav",
     pacman_comeRecolectable: "res/sounds/pacman_eatingRecolectable.wav",
-    pacman_comeVida: "/res/sounds/pacman_eatlife.wav",
-    pacman_modoEscapando: "/res/sounds/pacman_intermission.wav",
+    pacman_comeBala: "res/sounds/pacman_eatlife.wav",
+    pacman_comeVida: "res/sounds/pacman_extrapac.wav",
+    pacman_modoEscapando: "res/sounds/pacman_intermission.wav",
+    boss_generado: "res/sounds/boss_generate.wav",
+    ganar: "res/sounds/ganar.wav",
+    pasarNivel: "res/sounds/pasarNivel.wav",
+    perder: "res/sounds/perder.wav",
 };
 
 var rutasImagenes = Object.values(imagenes);

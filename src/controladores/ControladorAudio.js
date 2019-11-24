@@ -1,6 +1,9 @@
 class ControladorAudio {
     constructor() {
         this.comerSemillaPlaying = false;
+        this.escapandoPlaying = false;
+
+        this.audioEscapando = new Audio(sonidos.pacman_modoEscapando);
     }
 
     async playComerSemilla() {
@@ -10,5 +13,46 @@ class ControladorAudio {
             await audio.play();
             audio.onended = () => {this.comerSemillaPlaying = false;}
         }
+    }
+
+    async playEscapando() {
+        if(!this.escapandoPlaying) {
+            this.escapandoPlaying = true;
+            this.audioEscapando = new Audio(sonidos.pacman_modoEscapando);
+            this.audioEscapando.play();
+        }
+    }
+
+    async stopEscapando() {
+        this.audioEscapando.pause();
+        this.escapandoPlaying = false;
+    }
+
+    async playComerEnemigo() {
+        new Audio(sonidos.pacman_comeEnemigo).play();
+    }
+
+    async playComerVida() {
+        new Audio(sonidos.pacman_comeVida).play();
+    }
+
+    async playComerBala() {
+        new Audio(sonidos.pacman_comeBala).play();
+    }
+
+    async playGenerarEnemigoBoss() {
+        new Audio(sonidos.boss_generado).play();
+    }
+
+    async playGanar() {
+        new Audio(sonidos.ganar).play();
+    }
+
+    async playPasarNivel() {
+        new Audio(sonidos.pasarNivel).play();
+    }
+
+    async playPerder() {
+        new Audio(sonidos.perder).play();
     }
 }

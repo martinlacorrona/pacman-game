@@ -58,6 +58,11 @@ class GameLayer extends Layer {
             return;
         }
 
+        if(this.ultimoEstadoJuego == estadosJuego.enemigosEscapando)
+            this.controladorAudio.playEscapando();
+        else
+            this.controladorAudio.stopEscapando();
+
         this.puntuacionFinal = undefined;
 
         this.controladorJuego.actualizar();
@@ -65,7 +70,10 @@ class GameLayer extends Layer {
         if(this.controladorJuego.isGanar()) {
             this.controladorJuego.pasarNivel();
             this.mensaje = new Boton(imagenes.mensaje_pasarDeNivel, 480/2, 320/2);
+            if(this.controladorJuego.nivelActual != -1)
+                this.controladorAudio.playPasarNivel();
             if(this.controladorJuego.nivelActual == -1) { //HAS ACABADO
+                this.controladorAudio.playGanar();
                 this.mensaje = new Boton(imagenes.mensaje_ganar, 480/2, 320/2);
                 this.puntuacionFinal = new Texto(this.controladorJuego.getPuntosTotales(),200,320*0.5);
                 this.controladorJuego.reiniciarControlador();
@@ -84,6 +92,7 @@ class GameLayer extends Layer {
 
         if(this.controladorJuego.isGenerarBossFinal()) {
             this.enemigosBoss.forEach((item) => item.cambiarEstado(estados.moviendo));
+            this.controladorAudio.playGenerarEnemigoBoss();
         }
 
         if(this.controladorJuego.estadoJuego !== this.ultimoEstadoJuego &&
@@ -106,6 +115,7 @@ class GameLayer extends Layer {
             this.reiniciarNivel();
             if(this.controladorJuego.vidas == 0)
                 this.perder();
+            this.controladorAudio.playPerder();
             return;
         }
 
@@ -549,20 +559,22 @@ class GameLayer extends Layer {
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_10, 100));
         this.controladorJuego.puntosNivel += 10;
-
         this.controladorJuego.recolectablesRestantes--;
+        this.controladorAudio.playComerSemilla();
     }
 
     golpearEnemigoBala(x, y) {
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_100, 100));
         this.controladorJuego.puntosNivel += 100;
+        this.controladorAudio.playComerEnemigo();
     }
 
     comerEnemigo(x, y) {
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_200, 100));
         this.controladorJuego.puntosNivel += 200;
+        this.controladorAudio.playComerEnemigo();
     }
 
     perder() {
@@ -583,6 +595,7 @@ class GameLayer extends Layer {
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_1, 100));
         this.controladorJuego.recolectablesRestantes--;
+        this.controladorAudio.playComerBala();
     }
 
     comerVida(x, y) {
@@ -590,6 +603,7 @@ class GameLayer extends Layer {
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_1, 100));
         this.controladorJuego.recolectablesRestantes--;
+        this.controladorAudio.playComerVida();
     }
 
     golpearBoss(boss, posArray) {
@@ -607,5 +621,6 @@ class GameLayer extends Layer {
             //Lo borramos del array
             this.enemigosBoss.splice(posArray, 1);
         }
+        this.controladorAudio.playComerEnemigo();
     }
 }
