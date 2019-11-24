@@ -8,6 +8,7 @@ class GameLayer extends Layer {
         this.ultimoControl = orientaciones.derecha;
 
         this.controladorJuego = new ControladorJuego();
+        this.controladorAudio = new ControladorAudio();
 
         this.puntuacionFinal = undefined;
 
@@ -535,6 +536,7 @@ class GameLayer extends Layer {
     }
 
     comerSemillaBasica(x, y) {
+        this.controladorAudio.playComerSemilla();
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_10, 100));
         this.controladorJuego.puntosNivel += 10;

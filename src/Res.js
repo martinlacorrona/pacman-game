@@ -76,6 +76,14 @@ var imagenes = {
     fondo : "res/fondo.png",
 };
 
+var sonidos = {
+    pacman_muere: "res/sounds/pacman_death.wav",
+    pacman_comeEnemigo:  "res/sounds/pacman_eatenemy.wav",
+    pacman_comeRecolectable: "res/sounds/pacman_eatingRecolectable.wav",
+    pacman_comeVida: "/res/sounds/pacman_eatlife.wav",
+    pacman_modoEscapando: "/res/sounds/pacman_intermission.wav",
+};
+
 var rutasImagenes = Object.values(imagenes);
 cargarImagenes(0);
 
