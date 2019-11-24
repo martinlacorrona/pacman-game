@@ -1,7 +1,7 @@
 class Pad extends Boton {
 
     constructor(x, y) {
-        super(imagenes.pad, x, y)
+        super(imagenes.pad, x, y);
     }
 
     obtenerOrientacionX(pX){

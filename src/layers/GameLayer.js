@@ -15,8 +15,8 @@ class GameLayer extends Layer {
     }
 
     iniciar() {
-        this.botonDisparo = new Boton(imagenes.boton_disparo,480*0.75,320*0.83);
-        this.pad = new Pad(480*0.14,320*0.8);
+        this.botonDisparo = new Boton(imagenes.boton_disparo,480*0.87,320*0.55, 0.5, 0.5);
+        this.pad = new Pad(480*0.75,320*0.8);
         this.fondo = new Fondo(imagenes.fondo, 480*0.5,320*0.5)
 
         this.espacio = new Espacio(0);
