@@ -4,7 +4,7 @@ class EnemigoBoss extends Enemigo {
         super(x, y, imagenes.enemigo_basico_abajo_amarillo);
         this.estado = estados.esperando;
 
-        this.velocidad = 1;
+        this.velocidad = velocidadEnemigoJefeNormal;
 
         this.vidas = 3;
 
@@ -116,6 +116,7 @@ class EnemigoBoss extends Enemigo {
         let matrizWaveFront = this.calcularMatrizWaveFront(matrizMapa, jugador, iEnemigo, jEnemigo);
 
         if(this.estado != estados.escapando && this.estado != estados.escapandoFinal) {
+            this.velocidad = velocidadEnemigoJefeNormal;
             let min = Number.MAX_SAFE_INTEGER;
 
             //ABAJO
@@ -138,6 +139,7 @@ class EnemigoBoss extends Enemigo {
                 this.orientacion = orientaciones.izquierda;
             }
         } else {
+            this.velocidad = velocidadEnemigoJefeEscapando;
             this.calcularMejorMovimientoEscapando(jugador);
         }
     }

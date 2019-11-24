@@ -62,4 +62,7 @@ var zonaMuertaMando = 0.5;
 var sizeMapaAncho = 22;
 var sizeMapaAlto = 21;
 
+var velocidadEnemigoJefeNormal = 1;
+var velocidadEnemigoJefeEscapando = 0.75;
+
 
