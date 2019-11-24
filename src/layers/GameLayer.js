@@ -80,8 +80,6 @@ class GameLayer extends Layer {
         }
 
         if(this.controladorJuego.isGenerarBossFinal()) {
-            console.log("GENRAR ENEMIGO FINAL")
-            console.log(this.controladorJuego)
             this.enemigosBoss.forEach((item) => item.cambiarEstado(estados.moviendo));
         }
 
