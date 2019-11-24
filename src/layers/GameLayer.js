@@ -80,6 +80,8 @@ class GameLayer extends Layer {
         }
 
         if(this.controladorJuego.isGenerarBossFinal()) {
+            console.log("GENRAR ENEMIGO FINAL")
+            console.log(this.controladorJuego)
             this.enemigosBoss.forEach((item) => item.cambiarEstado(estados.moviendo));
         }
 
@@ -550,6 +552,7 @@ class GameLayer extends Layer {
 
     reiniciarNivel() {
         this.iniciar();
+        this.controladorJuego.reiniciarNivel();
         this.mensaje = new Boton(imagenes.mensaje_perderVida, 480/2, 320/2);
         this.pausa = true;
     }
