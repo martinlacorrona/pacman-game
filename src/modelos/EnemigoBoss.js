@@ -115,45 +115,84 @@ class EnemigoBoss extends Enemigo {
         //CALCULAR MATRIZ WAVEFRONT
         let matrizWaveFront = this.calcularMatrizWaveFront(matrizMapa, jugador, iEnemigo, jEnemigo);
 
+        //TODO: only for debug
+        this.printMatriz(matrizWaveFront);
+        this.printMatrizMapa(matrizMapa);
+        console.log("Enemigo: " + matrizWaveFront[iEnemigo ][jEnemigo])
+        console.log("ABAJO: " + matrizWaveFront[iEnemigo + 1][jEnemigo])
+        console.log("ARRIBA: " + matrizWaveFront[iEnemigo - 1][jEnemigo])
+        console.log("DERECHA: " + matrizWaveFront[iEnemigo][jEnemigo + 1])
+        console.log("IZQUIERDA: " + matrizWaveFront[iEnemigo][jEnemigo - 1])
 
-        if(this.estado != estados.escapando || this.estado != estados.escapandoFinal) {
+        if(this.estado != estados.escapando && this.estado != estados.escapandoFinal) {
             let min = Number.MAX_SAFE_INTEGER;
 
-            //DERECHA
+            //ABAJO
             if (matrizWaveFront[iEnemigo + 1][jEnemigo] != undefined && matrizWaveFront[iEnemigo + 1][jEnemigo] < min) {
+                min = matrizWaveFront[iEnemigo + 1][jEnemigo];
                 this.orientacion = orientaciones.abajo;
             }
-            //IZQUIERDA
+            //ARRIBA
             if (matrizWaveFront[iEnemigo - 1][jEnemigo] != undefined && matrizWaveFront[iEnemigo - 1][jEnemigo] < min) {
+                min = matrizWaveFront[iEnemigo - 1][jEnemigo];
                 this.orientacion = orientaciones.arriba;
             }
-            //ARRIBA
+            //DERECHA
             if (matrizWaveFront[iEnemigo][jEnemigo + 1] != undefined && matrizWaveFront[iEnemigo][jEnemigo + 1] < min) {
+                min = matrizWaveFront[iEnemigo][jEnemigo + 1];
                 this.orientacion = orientaciones.derecha;
             }
-            //ABAJO
+            //IZQUIERDA
             if (matrizWaveFront[iEnemigo][jEnemigo - 1] != undefined && matrizWaveFront[iEnemigo][jEnemigo - 1] < min) {
                 this.orientacion = orientaciones.izquierda;
             }
         } else {
-            let max = 0;
+            //TODO: usar otro algoritmo de escape si lo ve y listo
+        }
+    }
 
-            //DERECHA
-            if (matrizWaveFront[iEnemigo + 1][jEnemigo] != undefined && matrizWaveFront[iEnemigo + 1][jEnemigo] > max) {
-                this.orientacion = orientaciones.abajo;
+    //TODO: borrar, solo es para debug
+    printMatriz(matriz) {
+        let string;
+        for(let i=0; i < matriz.length; i++) {
+            if(i < 10)
+                string = "0" + i + ": ";
+            else
+                string = i + ": ";
+            for(let j=0; j < matriz[i].length; j++) {
+                if(matriz[i][j] == undefined)
+                    string += "##" + "-";
+                else if(matriz[i][j] < 10)
+                    string += "0" + matriz[i][j] + "-";
+                else
+                    string += matriz[i][j] + "-";
             }
-            //IZQUIERDA
-            if (matrizWaveFront[iEnemigo - 1][jEnemigo] != undefined && matrizWaveFront[iEnemigo - 1][jEnemigo] > max) {
-                this.orientacion = orientaciones.arriba;
+            console.log(string);
+        }
+    }
+
+    //TODO: borrar, solo es para debug
+    printMatrizMapa(matriz) {
+        let iEnemigo = Math.floor((this.y - this.alto/2) / factorPintado);
+        let jEnemigo = Math.floor(this.x / factorPintado) - 1;
+
+        let string;
+        for(let i=0; i < matriz.length; i++) {
+            if(i < 10)
+                string = "0" + i + ": ";
+            else
+                string = i + ": ";
+            for(let j=0; j < matriz[i].length; j++) {
+                if(iEnemigo == i && jEnemigo == j) {
+                    string += "EE" + "-";
+                } else {
+                    if (matriz[i][j])
+                        string += "__" + "-";
+                    else
+                        string += "##" + "-";
+                }
             }
-            //ARRIBA
-            if (matrizWaveFront[iEnemigo][jEnemigo + 1] != undefined && matrizWaveFront[iEnemigo][jEnemigo + 1] > max) {
-                this.orientacion = orientaciones.derecha;
-            }
-            //ABAJO
-            if (matrizWaveFront[iEnemigo][jEnemigo - 1] != undefined && matrizWaveFront[iEnemigo][jEnemigo - 1] > max) {
-                this.orientacion = orientaciones.izquierda;
-            }
+            console.log(string);
         }
     }
 
@@ -204,10 +243,10 @@ class EnemigoBoss extends Enemigo {
             return false;
 
         //Si ya hay algo menor que el propio jugador podemos dejar de generar ya que tenemos movimiento posible
-        if((matrizWaveFront[iEnemigo+1][jEnemigo] < valueEnemigo && matrizWaveFront[iEnemigo+1][jEnemigo] != undefined)
-            || (!matrizWaveFront[iEnemigo-1][jEnemigo] < valueEnemigo && matrizWaveFront[iEnemigo-1][jEnemigo] != undefined)
-                || (!matrizWaveFront[iEnemigo][jEnemigo+1] < valueEnemigo && matrizWaveFront[iEnemigo][jEnemigo+1] != undefined)
-                    || (!matrizWaveFront[iEnemigo][jEnemigo-1] < valueEnemigo && matrizWaveFront[iEnemigo][jEnemigo-1] != undefined)) {
+        if((matrizWaveFront[iEnemigo+1][jEnemigo] != undefined && matrizWaveFront[iEnemigo+1][jEnemigo] < valueEnemigo)
+            || (matrizWaveFront[iEnemigo-1][jEnemigo] != undefined && !matrizWaveFront[iEnemigo-1][jEnemigo] < valueEnemigo)
+                || (matrizWaveFront[iEnemigo][jEnemigo+1] != undefined && !matrizWaveFront[iEnemigo][jEnemigo+1] < valueEnemigo)
+                    || (matrizWaveFront[iEnemigo][jEnemigo-1] != undefined && !matrizWaveFront[iEnemigo][jEnemigo-1] < valueEnemigo)) {
             return true;
         }
         return false;
