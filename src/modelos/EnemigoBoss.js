@@ -4,7 +4,7 @@ class EnemigoBoss extends Enemigo {
         super(x, y, imagenes.enemigo_basico_abajo_amarillo);
         this.estado = estados.esperando;
 
-        this.velocidad = 0.25;
+        this.velocidad = 1;
 
         this.vidas = 3;
 
@@ -20,7 +20,7 @@ class EnemigoBoss extends Enemigo {
 
         //Guardamos el estado de la ultima orientacion
         this.ultimaOrientacion = this.orientacion;
-        this.ultimaOrientacionContrario = this.getOrientacionContraria(this.ultimaOrientacion);
+
         this.aIdleDerecha = new Animacion(imagenes.enemigo_boss_derecha,
             this.ancho, this.alto, 6*factorFotogramas, 2);
         this.aIdleIzquierda = new Animacion(imagenes.enemigo_boss_izquierda,
@@ -37,10 +37,6 @@ class EnemigoBoss extends Enemigo {
         this.animacionVidas = new Animacion(imagenes.enemigo_boss_3_vidas,
             this.ancho, this.alto, 2*factorFotogramas, 1);
 
-        //TODO: borrar, solo debug
-        this.iJugador = undefined;
-        this.jJugador = undefined;
-
         // Ref a la animación actual
         this.updateAnimation();
     }
@@ -56,12 +52,6 @@ class EnemigoBoss extends Enemigo {
                 this.animacion.dibujar(this.x, this.y);
                 this.animacionVidas.dibujar(this.x, this.y);
             }
-            //TODO: borrrar, solo debug
-            new Animacion(imagenes.bloque_basico, this.ancho, this.alto, 2, 1). dibujar(
-                Math.floor(this.x / factorPintado)*factorPintado, Math.floor(this.y / factorPintado)*factorPintado + this.alto/2);
-            if(this.iJugador != undefined)
-                new Animacion(imagenes.bloque_basico, this.ancho, this.alto, 2, 1). dibujar(
-                    this.iJugador*factorPintado, this.jJugador*factorPintado);
         }
     }
 
@@ -76,7 +66,7 @@ class EnemigoBoss extends Enemigo {
         if(this.estado != estados.esperando && !this.isInvencible()) {
             super.actualizar();
 
-            if(this.lastUpdate % 30 == 0) {
+            //if(this.lastUpdate % 30 == 0) {
                 this.calcularMejorMovimiento(jugador, matrizMapa);
                 switch (this.orientacion) {
                     case orientaciones.derecha:
@@ -96,7 +86,7 @@ class EnemigoBoss extends Enemigo {
                         this.vy = this.velocidad * 1;
                         break;
                 }
-            }
+            //}
 
             this.actualizarAnimacionVida();
 
@@ -111,64 +101,74 @@ class EnemigoBoss extends Enemigo {
     }
 
     calcularMejorMovimiento(jugador, matrizMapa) {
-        //CALCULAR MATRIZ WAVEFRONT
-        let matrizWaveFront = this.calcularMatrizWaveFront(matrizMapa, jugador);
-        
-        let iEnemigo = Math.floor(this.x / factorPintado) - 4;
-        let jEnemigo = Math.floor(this.y / factorPintado) + 3;
+        //Primero vamos a revisar que este exactamente en el bloque, ya que si no, no se debera de chequear.
+        let iEnemigo = (this.y - this.alto/2) / factorPintado;
+        let jEnemigo = this.x / factorPintado - 1;
 
-        let min = Number.MAX_SAFE_INTEGER;
-        console.log("Enemigo: " + matrizWaveFront[iEnemigo ][jEnemigo])
-        console.log("derecha: " + matrizWaveFront[iEnemigo + 1][jEnemigo])
-        console.log("izq: " + matrizWaveFront[iEnemigo - 1][jEnemigo])
-        console.log("arriba: " + matrizWaveFront[iEnemigo][jEnemigo + 1])
-        console.log("abajo: " + matrizWaveFront[iEnemigo][jEnemigo - 1])
-        //DERECHA
-        if(matrizWaveFront[iEnemigo + 1][jEnemigo] != undefined && matrizWaveFront[iEnemigo + 1][jEnemigo] < min) {
-            console.log("derecha")
-            min = matrizWaveFront[iEnemigo + 1][jEnemigo];
-            this.orientacion = orientaciones.derecha;
+        let exactIEnemigo = Math.floor((this.y - this.alto/2) / factorPintado);
+        let exactJEnemigo = Math.floor(this.x / factorPintado) - 1;
+
+        if(iEnemigo != exactIEnemigo || jEnemigo != exactJEnemigo) {
+            return;
         }
-        //IZQUIERDA
-        if(matrizWaveFront[iEnemigo - 1][jEnemigo] != undefined && matrizWaveFront[iEnemigo -1][jEnemigo] < min) {
-            console.log("izq")
-            min = matrizWaveFront[iEnemigo - 1][jEnemigo];
-            this.orientacion = orientaciones.izquierda;
-        }
-        //ARRIBA
-        if(matrizWaveFront[iEnemigo][jEnemigo + 1] != undefined && matrizWaveFront[iEnemigo][jEnemigo + 1] < min) {
-            console.log("abajo")
-            min = matrizWaveFront[iEnemigo][jEnemigo + 1];
-            this.orientacion = orientaciones.abajo;
-        }
-        //ABAJO
-        if(matrizWaveFront[iEnemigo][jEnemigo - 1] != undefined && matrizWaveFront[iEnemigo][jEnemigo - 1] < min) {
-            console.log("arriba")
-            this.orientacion = orientaciones.arriba;
+
+        //CALCULAR MATRIZ WAVEFRONT
+        let matrizWaveFront = this.calcularMatrizWaveFront(matrizMapa, jugador, iEnemigo, jEnemigo);
+
+
+        if(this.estado != estados.escapando || this.estado != estados.escapandoFinal) {
+            let min = Number.MAX_SAFE_INTEGER;
+
+            //DERECHA
+            if (matrizWaveFront[iEnemigo + 1][jEnemigo] != undefined && matrizWaveFront[iEnemigo + 1][jEnemigo] < min) {
+                this.orientacion = orientaciones.abajo;
+            }
+            //IZQUIERDA
+            if (matrizWaveFront[iEnemigo - 1][jEnemigo] != undefined && matrizWaveFront[iEnemigo - 1][jEnemigo] < min) {
+                this.orientacion = orientaciones.arriba;
+            }
+            //ARRIBA
+            if (matrizWaveFront[iEnemigo][jEnemigo + 1] != undefined && matrizWaveFront[iEnemigo][jEnemigo + 1] < min) {
+                this.orientacion = orientaciones.derecha;
+            }
+            //ABAJO
+            if (matrizWaveFront[iEnemigo][jEnemigo - 1] != undefined && matrizWaveFront[iEnemigo][jEnemigo - 1] < min) {
+                this.orientacion = orientaciones.izquierda;
+            }
+        } else {
+            let max = 0;
+
+            //DERECHA
+            if (matrizWaveFront[iEnemigo + 1][jEnemigo] != undefined && matrizWaveFront[iEnemigo + 1][jEnemigo] > max) {
+                this.orientacion = orientaciones.abajo;
+            }
+            //IZQUIERDA
+            if (matrizWaveFront[iEnemigo - 1][jEnemigo] != undefined && matrizWaveFront[iEnemigo - 1][jEnemigo] > max) {
+                this.orientacion = orientaciones.arriba;
+            }
+            //ARRIBA
+            if (matrizWaveFront[iEnemigo][jEnemigo + 1] != undefined && matrizWaveFront[iEnemigo][jEnemigo + 1] > max) {
+                this.orientacion = orientaciones.derecha;
+            }
+            //ABAJO
+            if (matrizWaveFront[iEnemigo][jEnemigo - 1] != undefined && matrizWaveFront[iEnemigo][jEnemigo - 1] > max) {
+                this.orientacion = orientaciones.izquierda;
+            }
         }
     }
 
-    calcularMatrizWaveFront(matrizMapa, jugador) {
+    calcularMatrizWaveFront(matrizMapa, jugador, iEnemigo, jEnemigo) {
         let matrizWaveFront = Array.from(Array(sizeMapaAncho), () => new Array(sizeMapaAlto));
 
-        let iJugador = Math.floor(jugador.x / factorPintado) + 1;
-        let jJugador = Math.floor(jugador.y / factorPintado) - 2;
-
-        //TODO: borrar, solo debug
-        this.iJugador = iJugador;
-        this.jJugador = jJugador;
-        console.log(iJugador + "/" + jJugador)
+        let iJugador = Math.floor(jugador.y / factorPintado);
+        let jJugador = Math.floor(jugador.x / factorPintado) - 1;
 
         matrizWaveFront[iJugador][jJugador] = 1;
 
-        return this.recursiveWaveFront(matrizMapa, matrizWaveFront, 1);
+        return this.recursiveWaveFront(matrizMapa, matrizWaveFront, 1, iEnemigo, jEnemigo);
     }
 
-    recursiveWaveFront(matrizMapa, matrizWaveFront, iteration) {
-        //TODO: borrar estas 2 lineas de codigo, solo debug
-        console.log(iteration)
-        this.printMatriz(matrizWaveFront)
-        this.printMatrizMapa(matrizMapa)
+    recursiveWaveFront(matrizMapa, matrizWaveFront, iteration, iEnemigo, jEnemigo) {
         let countMovimiento = 0;
         //APLICAMOS ALGORITMO
         for(let i=0; i < matrizWaveFront.length; i++) {
@@ -183,59 +183,36 @@ class EnemigoBoss extends Enemigo {
         }
 
         //Si no hubo ningun movimiento, no va a haber mas seguro
-        //TODO: chequear si ya esta el enemigo rodeado de puntos o bloques, entonces podemos parar...
-        if(countMovimiento == 0)
+        if(countMovimiento == 0 || this.chequearSiYaTieneMovimientoEnemigo(matrizWaveFront, iEnemigo, jEnemigo)) {
             return matrizWaveFront;
+        }
 
 
         //Como ha habido moviemiento hay que chequear la siguiente iteracion
-        return this.recursiveWaveFront(matrizMapa, matrizWaveFront, iteration + 1);
+        return this.recursiveWaveFront(matrizMapa, matrizWaveFront, iteration + 1, iEnemigo, jEnemigo);
     }
 
-    //TODO: borrar, solo es para debug
-    printMatriz(matriz) {
-        let string;
-        for(let i=0; i < matriz.length; i++) {
-            if(i < 10)
-                string = "0" + i + ": ";
-            else
-                string = i + ": ";
-            for(let j=0; j < matriz[i].length; j++) {
-                if(matriz[i][j] == undefined)
-                    string += "##" + "-";
-                else if(matriz[i][j] < 10)
-                    string += "0" + matriz[i][j] + "-";
-                else
-                    string += matriz[i][j] + "-";
-            }
-            console.log(string);
+    chequearSiYaTieneMovimientoEnemigo(matrizWaveFront, iEnemigo, jEnemigo) {
+        //Valores dentro del mapa
+        if(iEnemigo-1 < 0 || jEnemigo-1 < 0 || iEnemigo+1 > sizeMapaAncho-1 || jEnemigo+1 > sizeMapaAlto-1)
+            return false;
+        if(iEnemigo == undefined || jEnemigo == undefined)
+            return false;
+
+        let valueEnemigo = matrizWaveFront[iEnemigo+1][jEnemigo];
+        if(valueEnemigo == undefined) //Aun no llego al enemigo
+            return false;
+
+        //Si ya hay algo menor que el propio jugador podemos dejar de generar ya que tenemos movimiento posible
+        if((matrizWaveFront[iEnemigo+1][jEnemigo] < valueEnemigo && matrizWaveFront[iEnemigo+1][jEnemigo] != undefined)
+            || (!matrizWaveFront[iEnemigo-1][jEnemigo] < valueEnemigo && matrizWaveFront[iEnemigo-1][jEnemigo] != undefined)
+                || (!matrizWaveFront[iEnemigo][jEnemigo+1] < valueEnemigo && matrizWaveFront[iEnemigo][jEnemigo+1] != undefined)
+                    || (!matrizWaveFront[iEnemigo][jEnemigo-1] < valueEnemigo && matrizWaveFront[iEnemigo][jEnemigo-1] != undefined)) {
+            return true;
         }
+        return false;
     }
 
-    //TODO: borrar, solo es para debug
-    printMatrizMapa(matriz) {
-        let iEnemigo = Math.floor(this.x / factorPintado) - 4;
-        let jEnemigo = Math.floor(this.y / factorPintado) + 3;
-
-        let string;
-        for(let i=0; i < matriz.length; i++) {
-            if(i < 10)
-                string = "0" + i + ": ";
-            else
-                string = i + ": ";
-            for(let j=0; j < matriz[i].length; j++) {
-                if(iEnemigo == i && jEnemigo == j) {
-                    string += "EE" + "-";
-                } else {
-                    if (matriz[i][j])
-                        string += "__" + "-";
-                    else
-                        string += "##" + "-";
-                }
-            }
-            console.log(string);
-        }
-    }
 
     updateCellArrayWaveFront(i, j, matrizMapa, matrizWaveFront, iteration) {
         //En este caso se sale del mapa
