@@ -6,6 +6,7 @@ class ControladorJuego {
 
     reiniciarControlador() {
         this.vidas = 3;
+        this.vidasNivel = 0;
         this.puntosNivel = 0;
         this.puntosTotal = 0;
         this.nivelActual = 0;
@@ -23,6 +24,7 @@ class ControladorJuego {
 
     reiniciarNivel() {
         this.puntosNivel = 0;
+        this.vidasNivel = 0;
         this.estadoJuego = estadosJuego.normal;
         this.tiempoActivadoModoEscapando = 0;
         this.activarModoFinal = false;
@@ -46,6 +48,9 @@ class ControladorJuego {
 
         this.puntosTotal += this.puntosNivel;
         this.puntosNivel = 0;
+
+        this.vidas += this.vidasNivel;
+        this.vidasNivel = 0;
 
     }
 

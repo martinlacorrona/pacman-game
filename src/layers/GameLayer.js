@@ -95,7 +95,7 @@ class GameLayer extends Layer {
 
         //UI values
         this.puntos.valor = this.controladorJuego.puntosTotal + this.controladorJuego.puntosNivel;
-        this.vidas.valor = this.controladorJuego.vidas;
+        this.vidas.valor = this.controladorJuego.vidas + this.controladorJuego.vidasNivel;
         this.balas.valor = this.jugador.balas;
 
         if(this.jugador.estado == estados.muerto) {
@@ -215,6 +215,8 @@ class GameLayer extends Layer {
                     this.comerSemillaGrande(this.recolectables[i].x, this.recolectables[i].y);
                 if(this.recolectables[i] instanceof RecolectableBala)
                     this.comerBala(this.recolectables[i].x, this.recolectables[i].y);
+                if(this.recolectables[i] instanceof RecolectableVida)
+                    this.comerVida(this.recolectables[i].x, this.recolectables[i].y);
 
                 this.espacio.eliminarCuerpoDinamico(this.recolectables[i]);
                 this.recolectables.splice(i, 1);
@@ -386,6 +388,14 @@ class GameLayer extends Layer {
 
                 break;
 
+            case "V":
+                let vida = new RecolectableVida(x,y);
+                vida.y = vida.y - vida.alto;
+                this.recolectables.push(vida);
+                this.espacio.agregarCuerpoDinamico(vida);
+
+                break;
+
             case "*":
                 this.jugador = new Jugador(x, y);
                 // modificación para empezar a contar desde el suelo
@@ -540,6 +550,13 @@ class GameLayer extends Layer {
 
     comerBala(x, y) {
         this.jugador.balas++;
+        this.puntosImagenes.push(
+            new PuntosImagen(x, y, imagenes.puntos_1, 100));
+        this.controladorJuego.recolectablesRestantes--;
+    }
+
+    comerVida(x, y) {
+        this.controladorJuego.vidasNivel++;
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_1, 100));
         this.controladorJuego.recolectablesRestantes--;
