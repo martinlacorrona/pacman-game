@@ -188,7 +188,9 @@ class GameLayer extends Layer {
                         .eliminarCuerpoDinamico(this.disparosJugador[i]);
                     this.disparosJugador.splice(i, 1);
                     i = i-1;
-                    this.enemigos[j].impactado();
+
+                    this.enemigos.splice(j, 1);
+                    j = j-1;
                 }
             }
             for (let j=0; j < this.enemigosBoss.length; j++){ //ENEMIGO BOSS
