@@ -29,6 +29,7 @@ orientaciones.abajo = 3;
 orientaciones.parado = 4;
 
 factorRedimension = 0.35;
+factorPintado = 40 * factorRedimension;
 factorFotogramas = 3;
 
 var estadosJuego = {};
@@ -57,5 +58,8 @@ var sizeBloque = 14;
 var visionEnemigoBasico = 10;
 
 var zonaMuertaMando = 0.5;
+
+var sizeMapaAncho = 22;
+var sizeMapaAlto = 21;
 
 

@@ -9,8 +9,6 @@ class GameLayer extends Layer {
 
         this.controladorJuego = new ControladorJuego();
 
-        this.matrizMapa = Array.from(Array(22), () => new Array(23));
-
         this.iniciar();
     }
 
@@ -44,6 +42,8 @@ class GameLayer extends Layer {
         this.nivel = new Texto(this.controladorJuego.nivelActual + 1, 480*0.7, 320*0.20);
 
         this.ultimoEstadoJuego = estadosJuego.normal;
+
+        this.matrizMapa = Array.from(Array(sizeMapaAncho), () => new Array(sizeMapaAlto));
 
         this.cargarMapa("res/" + this.controladorJuego.nivelActual + ".txt");
     }
@@ -319,6 +319,14 @@ class GameLayer extends Layer {
     }
 
     cargarMapa(ruta){
+        //inicializamos la matrizMapa
+        for(let i=0; i < this.matrizMapa.length; i++) {
+            for(let j=0; j < this.matrizMapa[i].length; j++) {
+                this.matrizMapa[i][j] = true;
+            }
+        }
+
+        //fichero
         let fichero = new XMLHttpRequest();
         fichero.open("GET", ruta, false);
 
@@ -330,8 +338,8 @@ class GameLayer extends Layer {
                 let linea = lineas[i];
                 for (let j = 0; j < linea.length; j++){
                     let simbolo = linea[j];
-                    let x = (40/2*factorRedimension) + j * (40*factorRedimension); // x central
-                    let y = (40/2*factorRedimension) + i * (40*factorRedimension); // y de abajo
+                    let x = factorPintado + j * factorPintado; // x central
+                    let y = factorPintado + i * factorPintado; // y de abajo
                     this.cargarObjetoMapa(simbolo,x,y);
                     this.cargarObjetoMatrizMapa(simbolo,i,j);
                 }
@@ -428,7 +436,13 @@ class GameLayer extends Layer {
     cargarObjetoMatrizMapa(simbolo, i, j) {
         switch (simbolo) {
             case "#":
-                this.matrizMapa[i][j] = "#";
+                this.matrizMapa[i][j] = false;
+                break;
+            case ">":
+                this.matrizMapa[i][j] = false;
+                break;
+            case "<":
+                this.matrizMapa[i][j] = false;
                 break;
 
         }
