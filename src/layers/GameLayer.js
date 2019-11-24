@@ -298,7 +298,7 @@ class GameLayer extends Layer {
 
         // disparar
         if (  controles.disparo ){
-            var nuevoDisparo = this.jugador.disparar();
+            let nuevoDisparo = this.jugador.disparar();
             if ( nuevoDisparo != null ) {
                 this.espacio.agregarCuerpoDinamico(nuevoDisparo);
                 this.disparosJugador.push(nuevoDisparo);
@@ -488,7 +488,7 @@ class GameLayer extends Layer {
         controles.pausa = false;
 
 
-        for(var i=0; i < pulsaciones.length; i++) {
+        for(let i=0; i < pulsaciones.length; i++) {
             // MUY SIMPLE SIN BOTON cualquier click en pantalla lo activa
             if(pulsaciones[i].tipo == tipoPulsacion.inicio){
                 controles.continuar = true;
