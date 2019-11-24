@@ -9,6 +9,8 @@ class GameLayer extends Layer {
 
         this.controladorJuego = new ControladorJuego();
 
+        this.puntuacionFinal = undefined;
+
         this.iniciar();
     }
 
@@ -53,20 +55,19 @@ class GameLayer extends Layer {
             return;
         }
 
+        this.puntuacionFinal = undefined;
+
         this.controladorJuego.actualizar();
 
         if(this.controladorJuego.isGanar()) {
             this.controladorJuego.pasarNivel();
+            this.mensaje = new Boton(imagenes.mensaje_pasarDeNivel, 480/2, 320/2);
             if(this.controladorJuego.nivelActual == -1) { //HAS ACABADO
                 this.mensaje = new Boton(imagenes.mensaje_ganar, 480/2, 320/2);
-                this.puntos.x = 480/2;
-                this.puntos.y = 320/2;
-                this.puntos.dibujar();
-                this.pausa = true;
+                this.puntuacionFinal = new Texto(this.controladorJuego.getPuntosTotales(),200,320*0.5);
                 this.controladorJuego.reiniciarControlador();
             }
             this.iniciar();
-            this.mensaje = new Boton(imagenes.mensaje_pasarDeNivel, 480/2, 320/2);
             this.pausa = true;
         }
 
@@ -270,6 +271,9 @@ class GameLayer extends Layer {
 
         if ( this.pausa ) {
             this.mensaje.dibujar();
+            if(this.puntuacionFinal != undefined) {
+                this.puntuacionFinal.dibujar();
+            }
         }
     }
 
@@ -357,7 +361,7 @@ class GameLayer extends Layer {
     cargarObjetoMapa(simbolo, x, y) {
         switch(simbolo) {
             case "#":
-                let bloque = new BloqueBasico(x,y);
+                let bloque = new BloqueBasico(x,y, this.controladorJuego.arrayBloquesNiveles[this.controladorJuego.nivelActual]);
                 bloque.y = bloque.y - bloque.alto/2;
                 this.bloques.push(bloque);
                 this.espacio.agregarCuerpoEstatico(bloque);

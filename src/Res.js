@@ -13,6 +13,8 @@ var imagenes = {
 
     /** BLOQUES e ICONOS**/
     bloque_basico : "res/bloque-basico.png",
+    bloque_basico2 : "res/bloque-nivel2.png",
+    bloque_basico3 : "res/bloque-nivel3.png",
     bloque_vacio : "res/bloque-vacio.png",
     icono_recolectable : "res/pacdot.png",
     icono_recolectable_grande : "res/pacdot-big.png",

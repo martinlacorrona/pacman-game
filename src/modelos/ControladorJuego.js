@@ -2,6 +2,9 @@ class ControladorJuego {
 
     constructor() {
         this.reiniciarControlador();
+
+        this.arrayBloquesNiveles =
+            [imagenes.bloque_basico, imagenes.bloque_basico2, imagenes.bloque_basico3];
     }
 
     reiniciarControlador() {
@@ -10,7 +13,7 @@ class ControladorJuego {
         this.puntosNivel = 0;
         this.puntosTotal = 0;
         this.nivelActual = 0;
-        this.ultimoNivel = 2;
+        this.ultimoNivel = ultimoNivel;
 
         this.estadoJuego = estadosJuego.normal;
 
