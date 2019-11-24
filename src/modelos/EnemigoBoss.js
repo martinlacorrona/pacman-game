@@ -115,15 +115,6 @@ class EnemigoBoss extends Enemigo {
         //CALCULAR MATRIZ WAVEFRONT
         let matrizWaveFront = this.calcularMatrizWaveFront(matrizMapa, jugador, iEnemigo, jEnemigo);
 
-        //TODO: only for debug
-        this.printMatriz(matrizWaveFront);
-        this.printMatrizMapa(matrizMapa);
-        console.log("Enemigo: " + matrizWaveFront[iEnemigo ][jEnemigo])
-        console.log("ABAJO: " + matrizWaveFront[iEnemigo + 1][jEnemigo])
-        console.log("ARRIBA: " + matrizWaveFront[iEnemigo - 1][jEnemigo])
-        console.log("DERECHA: " + matrizWaveFront[iEnemigo][jEnemigo + 1])
-        console.log("IZQUIERDA: " + matrizWaveFront[iEnemigo][jEnemigo - 1])
-
         if(this.estado != estados.escapando && this.estado != estados.escapandoFinal) {
             let min = Number.MAX_SAFE_INTEGER;
 
@@ -147,52 +138,84 @@ class EnemigoBoss extends Enemigo {
                 this.orientacion = orientaciones.izquierda;
             }
         } else {
-            //TODO: usar otro algoritmo de escape si lo ve y listo
+            this.calcularMejorMovimientoEscapando(jugador);
         }
     }
 
-    //TODO: borrar, solo es para debug
-    printMatriz(matriz) {
-        let string;
-        for(let i=0; i < matriz.length; i++) {
-            if(i < 10)
-                string = "0" + i + ": ";
-            else
-                string = i + ": ";
-            for(let j=0; j < matriz[i].length; j++) {
-                if(matriz[i][j] == undefined)
-                    string += "##" + "-";
-                else if(matriz[i][j] < 10)
-                    string += "0" + matriz[i][j] + "-";
-                else
-                    string += matriz[i][j] + "-";
+    calcularMejorMovimientoEscapando(jugador) {
+        //si ve al jugador
+        let orientacionFinal = undefined;
+
+        //El enemigo solo ve a la vision que este definida en globales
+        let distanciaMaxima = sizeBloque * visionEnemigoBasico;
+        let maxDerecha = this.x + distanciaMaxima;
+        let maxIzquierda = this.x - distanciaMaxima;
+        let maxArriba = this.y - distanciaMaxima;
+        let maxAbajo = this.y + distanciaMaxima;
+
+        //AVERIGUAMOS PARA DONDE ESTA EL JUGADOR.
+        if(jugador.x >= this.x && jugador.x <= this.x) {
+            //Entonces, esta o arriba o abajo.
+            //Chequeamos si es arriba y esta dentro del rango de vision
+            if(jugador.y < this.y && jugador.y > maxArriba) {
+                orientacionFinal = orientaciones.arriba;
             }
-            console.log(string);
+            //Chequeamos si es abajo y esta dentro del rango de vision
+            if(jugador.y > this.y && jugador.y < maxAbajo) {
+                orientacionFinal = orientaciones.abajo;
+            }
+        } else if(jugador.y >= this.y && jugador.y <= this.y) {
+            //Entonces, esta o derecha o izquierda.
+            //Chequeamos si es derecha y esta dentro del rango de vision
+            if(jugador.x > this.x && jugador.x < maxDerecha) {
+                orientacionFinal = orientaciones.derecha;
+            }
+            //Chequeamos si es izquierda y esta dentro del rango de vision
+            if(jugador.x < this.x && jugador.x > maxIzquierda) {
+                orientacionFinal = orientaciones.izquierda;
+            }
         }
-    }
 
-    //TODO: borrar, solo es para debug
-    printMatrizMapa(matriz) {
-        let iEnemigo = Math.floor((this.y - this.alto/2) / factorPintado);
-        let jEnemigo = Math.floor(this.x / factorPintado) - 1;
+        if (orientacionFinal != undefined) {
+            orientacionFinal = this.getOrientacionContraria(orientacionFinal);
+            this.orientacion = orientacionFinal;
+        }
 
-        let string;
-        for(let i=0; i < matriz.length; i++) {
-            if(i < 10)
-                string = "0" + i + ": ";
-            else
-                string = i + ": ";
-            for(let j=0; j < matriz[i].length; j++) {
-                if(iEnemigo == i && jEnemigo == j) {
-                    string += "EE" + "-";
-                } else {
-                    if (matriz[i][j])
-                        string += "__" + "-";
-                    else
-                        string += "##" + "-";
+        if (this.estado != estados.muriendo && this.estado != estados.muerto) {
+            if (this.vx == 0 && this.vy == 0 && this.orientacion != undefined) { //SE HA PARADO
+                this.ultimaOrientacion = this.orientacion;
+                this.ultimaOrientacionContrario = this.getOrientacionContraria(this.ultimaOrientacion);
+                this.orientacion = undefined; //orientacion no definida
+            }
+
+            if (this.estado != estados.muerto) {
+                if (this.vx == 0 && this.vy == 0) {
+                    let orientacion = Math.floor(Math.random() * 4);
+                    while (orientacion == this.ultimaOrientacion || orientacion == this.ultimaOrientacionContrario) {
+                        orientacion = Math.floor(Math.random() * 4);
+                    }
+                    this.orientacion = orientacion;
+                    this.updateAnimation();
                 }
             }
-            console.log(string);
+            switch (this.orientacion) {
+                case orientaciones.derecha:
+                    this.vx = this.velocidad * 1;
+                    this.vy = 0;
+                    break;
+                case orientaciones.izquierda:
+                    this.vx = this.velocidad * -1;
+                    this.vy = 0;
+                    break;
+                case orientaciones.arriba:
+                    this.vx = 0;
+                    this.vy = this.velocidad * -1;
+                    break;
+                case orientaciones.abajo:
+                    this.vx = 0;
+                    this.vy = this.velocidad * 1;
+                    break;
+            }
         }
     }
 
