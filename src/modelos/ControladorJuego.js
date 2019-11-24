@@ -18,9 +18,6 @@ class ControladorJuego {
         this.activarModoFinal = false;
 
         this.time = 0;
-
-        this.totalRecolectables = 0;
-        this.recolectablesRestantes = 1;
         this.fueGeneradoBoss = false;
     }
 
@@ -30,7 +27,6 @@ class ControladorJuego {
         this.tiempoActivadoModoEscapando = 0;
         this.activarModoFinal = false;
         this.time = 0;
-        this.recolectablesRestantes = this.totalRecolectables;
         this.fueGeneradoBoss = false;
     }
 
@@ -88,7 +84,7 @@ class ControladorJuego {
 
     isGenerarBossFinal() {
         if(this.totalRecolectables / 2 > this.recolectablesRestantes &&
-            !this.fueGeneradoBoss) {
+            !this.fueGeneradoBoss && this.totalRecolectables != 0) {
                 this.fueGeneradoBoss = true;
                 return true;
         }

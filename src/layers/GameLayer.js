@@ -79,6 +79,7 @@ class GameLayer extends Layer {
         }
 
         if(this.controladorJuego.isGenerarBossFinal()) {
+            console.log(this.controladorJuego)
             this.enemigosBoss.forEach((item) => item.cambiarEstado(estados.moviendo));
         }
 
@@ -158,7 +159,8 @@ class GameLayer extends Layer {
             if (this.jugador.colisiona(this.enemigosBoss[i]) && this.enemigosBoss[i].estado != estados.muerto
                 && this.enemigosBoss[i].estado != estados.muriendo) {
                 if(this.enemigosBoss[i].estado != estados.escapando
-                        && this.enemigosBoss[i].estado != estados.escapandoFinal) {
+                        && this.enemigosBoss[i].estado != estados.escapandoFinal
+                            && this.enemigosBoss[i].estado != estados.esperando) {
                     if (this.jugador.estado != estados.muerto && this.jugador.estado != estados.muriendo &&
                         !this.enemigosBoss[i].isInvencible()) {
                         this.controladorJuego.vidas--;
@@ -346,6 +348,7 @@ class GameLayer extends Layer {
             }
             this.controladorJuego.totalRecolectables = this.recolectables.length;
             this.controladorJuego.recolectablesRestantes = this.recolectables.length;
+            console.log(this.controladorJuego);
         }.bind(this);
 
         fichero.send(null);
