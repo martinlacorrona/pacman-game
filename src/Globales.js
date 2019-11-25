@@ -1,3 +1,5 @@
+var version ="v0.7.7";
+
 var pulsaciones = []; // actuales registradas
 
 var entradas = {}; // tipos

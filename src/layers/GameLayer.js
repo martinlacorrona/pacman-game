@@ -16,6 +16,7 @@ class GameLayer extends Layer {
     }
 
     iniciar() {
+        this.version = new Texto(version,480*0.90,320*0.99, undefined, "8px Arial");
         this.botonDisparo = new Boton(imagenes.boton_disparo,480*0.87,320*0.55, 0.5, 0.5);
         this.botonPausa = new Boton(imagenes.boton_pausa,480*0.97,320*0.065, 0.5, 0.5);
         this.pad = new Pad(480*0.75,320*0.8);
@@ -69,6 +70,7 @@ class GameLayer extends Layer {
 
         if(this.controladorJuego.isGanar()) {
             this.controladorJuego.pasarNivel();
+            this.controladorAudio.stopEscapando();
             this.mensaje = new Boton(imagenes.mensaje_pasarDeNivel, 480/2, 320/2);
             if(this.controladorJuego.nivelActual != -1)
                 this.controladorAudio.playPasarNivel();
@@ -280,6 +282,7 @@ class GameLayer extends Layer {
         this.balas.dibujar();
         this.nivel.dibujar();
         this.botonPausa.dibujar();
+        this.version.dibujar();
         if(this.controladorJuego.fueGeneradoBoss)
             this.jefeFinalGenerado.dibujar();
         if ( !this.pausa && entrada == entradas.pulsaciones) {
