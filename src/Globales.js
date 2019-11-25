@@ -1,4 +1,4 @@
-var version ="v0.7.10";
+var version ="v0.7.11";
 
 var pulsaciones = []; // actuales registradas
 

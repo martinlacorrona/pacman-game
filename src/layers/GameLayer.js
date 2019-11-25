@@ -43,7 +43,7 @@ class GameLayer extends Layer {
 
         this.balas = new Texto(0, 480*0.85, 320*0.3175);
 
-        this.nivel = new Texto(this.controladorJuego.nivelActual + 1, 480*0.84, 320*0.415);
+        this.nivel = new Texto((this.controladorJuego.nivelActual + 1) + "/" + (ultimoNivel + 1), 480*0.84, 320*0.415);
 
         this.jefeFinalGenerado = new Texto("JEFE GENERADO", 480*0.765, 320*0.45, "red");
 
