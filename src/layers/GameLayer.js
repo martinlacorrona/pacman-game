@@ -582,13 +582,14 @@ class GameLayer extends Layer {
 
     perder() {
         this.controladorJuego.reiniciarControlador();
+        this.iniciar();
         this.mensaje = new Boton(imagenes.mensaje_perder, 480/2, 320/2);
         this.pausa = true;
     }
 
     reiniciarNivel() {
-        this.iniciar();
         this.controladorJuego.reiniciarNivel();
+        this.iniciar();
         this.mensaje = new Boton(imagenes.mensaje_perderVida, 480/2, 320/2);
         this.pausa = true;
     }
