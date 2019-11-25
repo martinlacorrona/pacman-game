@@ -4,6 +4,7 @@ class ControladorAudio {
         this.escapandoPlaying = false;
         this.comerEnemigoPlaying = false;
         this.perderPlaying = false;
+        this.perderPartidaPlaying = false;
 
         this.audioEscapando = new Audio(sonidos.pacman_modoEscapando);
     }
@@ -45,7 +46,7 @@ class ControladorAudio {
     }
 
     async playComerBala() {
-        new Audio(sonidos.pacman_comeBala).play();
+        new Audio(sonidos.pacman_eatingBala).play();
     }
 
     async playGenerarEnemigoBoss() {
@@ -67,5 +68,18 @@ class ControladorAudio {
             await audio.play();
             audio.onended = () => {this.perderPlaying = false;}
         }
+    }
+
+    async playPerderPartida() {
+        if(!this.perderPartidaPlaying) {
+            this.perderPartidaPlaying = true;
+            let audio = new Audio(sonidos.perderPartida);
+            await audio.play();
+            audio.onended = () => {this.perderPartidaPlaying = false;}
+        }
+    }
+
+    async playDisparar() {
+        new Audio(sonidos.disparar).play();
     }
 }

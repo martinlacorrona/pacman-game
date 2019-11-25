@@ -158,6 +158,8 @@ class GameLayer extends Layer {
                     if (this.jugador.estado != estados.muerto && this.jugador.estado != estados.muriendo) {
                         this.controladorJuego.vidas--;
                         this.controladorJuego.reiniciarNivel();
+                        if(this.controladorJuego.vidas == 0)
+                            this.controladorAudio.playPerderPartida();
                         this.controladorAudio.playPerder();
                     }
                     this.jugador.golpeado();
@@ -316,6 +318,7 @@ class GameLayer extends Layer {
             if ( nuevoDisparo != null ) {
                 this.espacio.agregarCuerpoDinamico(nuevoDisparo);
                 this.disparosJugador.push(nuevoDisparo);
+                this.controladorAudio.playDisparar();
             }
         }
 
