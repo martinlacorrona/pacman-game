@@ -608,7 +608,7 @@ class GameLayer extends Layer {
     comerVida(x, y) {
         this.controladorJuego.vidasNivel++;
         this.puntosImagenes.push(
-            new PuntosImagen(x, y, imagenes.puntos_1, 100));
+            new PuntosImagen(x, y+1, imagenes.puntos_1, 100));
         this.controladorJuego.recolectablesRestantes--;
         this.controladorAudio.playComerVida();
     }
