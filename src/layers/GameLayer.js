@@ -115,7 +115,6 @@ class GameLayer extends Layer {
             this.reiniciarNivel();
             if(this.controladorJuego.vidas == 0)
                 this.perder();
-            this.controladorAudio.playPerder();
             return;
         }
 
@@ -157,6 +156,7 @@ class GameLayer extends Layer {
                     if (this.jugador.estado != estados.muerto && this.jugador.estado != estados.muriendo) {
                         this.controladorJuego.vidas--;
                         this.controladorJuego.reiniciarNivel();
+                        this.controladorAudio.playPerder();
                     }
                     this.jugador.golpeado();
                 } else if(this.controladorJuego.estadoJuego === estadosJuego.enemigosEscapando) {

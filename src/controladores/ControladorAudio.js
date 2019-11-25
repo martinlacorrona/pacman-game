@@ -2,6 +2,8 @@ class ControladorAudio {
     constructor() {
         this.comerSemillaPlaying = false;
         this.escapandoPlaying = false;
+        this.comerEnemigoPlaying = false;
+        this.perderPlaying = false;
 
         this.audioEscapando = new Audio(sonidos.pacman_modoEscapando);
     }
@@ -19,7 +21,7 @@ class ControladorAudio {
         if(!this.escapandoPlaying) {
             this.escapandoPlaying = true;
             this.audioEscapando = new Audio(sonidos.pacman_modoEscapando);
-            this.audioEscapando.play();
+            await this.audioEscapando.play();
         }
     }
 
@@ -29,7 +31,12 @@ class ControladorAudio {
     }
 
     async playComerEnemigo() {
-        new Audio(sonidos.pacman_comeEnemigo).play();
+        if(!this.comerEnemigoPlaying) {
+            this.comerEnemigoPlaying = true;
+            let audio = new Audio(sonidos.pacman_comeEnemigo);
+            await audio.play();
+            audio.onended = () => {this.comerEnemigoPlaying = false;}
+        }
     }
 
     async playComerVida() {
@@ -53,6 +60,11 @@ class ControladorAudio {
     }
 
     async playPerder() {
-        new Audio(sonidos.perder).play();
+        if(!this.perderPlaying) {
+            this.perderPlaying = true;
+            let audio = new Audio(sonidos.perder);
+            await audio.play();
+            audio.onended = () => {this.perderPlaying = false;}
+        }
     }
 }
