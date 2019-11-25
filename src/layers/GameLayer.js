@@ -584,9 +584,11 @@ class GameLayer extends Layer {
     }
 
     perder() {
+        let puntos = this.controladorJuego.getPuntosTotales();
         this.controladorJuego.reiniciarControlador();
         this.iniciar();
         this.mensaje = new Boton(imagenes.mensaje_perder, 480/2, 320/2);
+        this.puntuacionFinal = new Texto(puntos,230,320*0.538);
         this.pausa = true;
     }
 
