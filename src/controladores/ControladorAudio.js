@@ -22,6 +22,7 @@ class ControladorAudio {
             this.escapandoPlaying = true;
             this.audioEscapando = new Audio(sonidos.pacman_modoEscapando);
             await this.audioEscapando.play();
+            this.audioEscapando.onended = () => {this.escapandoPlaying = false;}
         }
     }
 

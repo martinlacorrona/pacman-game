@@ -58,7 +58,7 @@ class GameLayer extends Layer {
             return;
         }
 
-        if(this.ultimoEstadoJuego == estadosJuego.enemigosEscapando)
+        if(this.controladorJuego.estadoJuego == estadosJuego.enemigosEscapando)
             this.controladorAudio.playEscapando();
         else
             this.controladorAudio.stopEscapando();
