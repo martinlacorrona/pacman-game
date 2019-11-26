@@ -33,6 +33,9 @@ function onKeyDown( event) {
             case 27:
                 controles.pausa = true;
                 break;
+            case 82:
+                controles.reiniciar = true;
+                break;
         }
 
     }
@@ -45,8 +48,8 @@ function onKeyUp( event) {
     teclas.splice( posicion, 1);
     switch ( event.keyCode ){
         case 32:
-            controles.disparo = false;
             controles.continuar = false;
+            controles.disparo = false;
             break;
     }
 

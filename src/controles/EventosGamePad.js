@@ -48,7 +48,7 @@ function actualizarOrdenes(){
         valorYJoystickIzquierdo = 0;
     controles.moverY = parseFloat(valorYJoystickIzquierdo).toFixed( 2 );
 
-    if(gP1.buttons[0].pressed) { // 1 es el botón A
+    if(gP1.buttons[0].pressed) { // 0 es el botón A
         if ( botonesPulsados[0] == false ) {
             botonesPulsados[0] = true;
             controles.disparo = true;
@@ -58,6 +58,11 @@ function actualizarOrdenes(){
         botonesPulsados[9] = true;
         controles.continuar = false;
         controles.pausa = true;
+    } else if(gP1.buttons[1].pressed) { //boton B
+        botonesPulsados[1] = true;
+        controles.continuar = false;
+        controles.pausa = false;
+        controles.reiniciar = true;
     } else {
         botonesPulsados[0] = false;
         botonesPulsados[9] = false;

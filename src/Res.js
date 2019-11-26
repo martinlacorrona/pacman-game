@@ -69,6 +69,7 @@ var imagenes = {
     mensaje_perderVida : "res/mensaje_perderVida.png",
     boton_jugar : "res/boton_jugar.png",
     boton_pausa : "res/boton_pausa.png",
+    boton_reiniciar : "res/boton_reiniciar.png",
     boton_disparo : "res/boton_disparo.png",
     boton_salto : "res/boton_salto.png",
     boton_jugar : "res/boton_jugar.png",

@@ -12,8 +12,6 @@ class GameLayer extends Layer {
 
         this.puntuacionFinal = undefined;
 
-        this.disparado = false;
-
         this.iniciar();
     }
 
@@ -21,6 +19,7 @@ class GameLayer extends Layer {
         this.version = new Texto(version,480*0.90,320*0.99, undefined, "8px Arial");
         this.botonDisparo = new Boton(imagenes.boton_disparo,480*0.87,320*0.55, 0.5, 0.5);
         this.botonPausa = new Boton(imagenes.boton_pausa,480*0.97,320*0.065, 0.5, 0.5);
+        this.botonReiniciar = new Boton(imagenes.boton_reiniciar,480*0.97,320*0.14, 0.5, 0.5);
         this.pad = new Pad(480*0.75,320*0.8);
         this.fondo = new Fondo(imagenes.fondo, 480*0.5,320*0.5);
         this.gui = new Fondo(imagenes.gui, 480*0.5,320*0.5);
@@ -291,6 +290,7 @@ class GameLayer extends Layer {
         this.balas.dibujar();
         this.nivel.dibujar();
         this.botonPausa.dibujar();
+        this.botonReiniciar.dibujar();
         this.version.dibujar();
         if(this.controladorJuego.fueGeneradoBoss)
             this.jefeFinalGenerado.dibujar();
@@ -319,19 +319,20 @@ class GameLayer extends Layer {
             this.pausa = false;
         }
 
+        if (controles.reiniciar){
+            controles.reiniciar = false;
+            this.reinciarTodo();
+        }
+
         // disparar
         if (  controles.disparo ){
-            if(!this.disparado) {
-                let nuevoDisparo = this.jugador.disparar();
-                if (nuevoDisparo != null) {
-                    this.espacio.agregarCuerpoDinamico(nuevoDisparo);
-                    this.disparosJugador.push(nuevoDisparo);
-                    this.controladorAudio.playDisparar();
-                }
-                this.disparado = true;
+            let nuevoDisparo = this.jugador.disparar();
+            if (nuevoDisparo != null) {
+                this.espacio.agregarCuerpoDinamico(nuevoDisparo);
+                this.disparosJugador.push(nuevoDisparo);
+                this.controladorAudio.playDisparar();
+                controles.disparo = false;
             }
-        } else {
-            this.disparado = false;
         }
 
         // Eje X
@@ -509,6 +510,7 @@ class GameLayer extends Layer {
         // Suponemos botones no estan pulsados
         this.botonDisparo.pulsado = false;
         this.botonPausa.pulsado = false;
+        this.botonReiniciar.pulsado = false;
         // suponemos que el pad está sin tocar
         controles.moverX = 0;
         controles.moverY = 0;
@@ -550,6 +552,12 @@ class GameLayer extends Layer {
                 this.botonPausa.pulsado = true;
                 if ( pulsaciones[i].tipo == tipoPulsacion.inicio) {
                     controles.pausa = true;
+                }
+            }
+            if (this.botonReiniciar.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
+                this.botonReiniciar.pulsado = true;
+                if ( pulsaciones[i].tipo == tipoPulsacion.inicio) {
+                    controles.reiniciar = true;
                 }
             }
 
@@ -604,6 +612,14 @@ class GameLayer extends Layer {
         this.pausa = true;
     }
 
+    reinciarTodo() {
+        this.controladorJuego.reiniciarControlador();
+        this.iniciar();
+        this.mensaje = new Boton(imagenes.mensaje_como_jugar, 480/2, 320/2);
+        this.pausa = true;
+
+    }
+
     reiniciarNivel() {
         this.controladorJuego.reiniciarNivel();
         this.iniciar();
@@ -613,6 +629,7 @@ class GameLayer extends Layer {
 
     comerBala(x, y) {
         this.jugador.balas++;
+        console.log("bala comida")
         this.puntosImagenes.push(
             new PuntosImagen(x, y, imagenes.puntos_1, 100));
         this.controladorJuego.recolectablesRestantes--;
