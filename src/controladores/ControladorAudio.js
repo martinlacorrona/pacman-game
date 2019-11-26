@@ -7,6 +7,7 @@ class ControladorAudio {
         this.perderPartidaPlaying = false;
 
         this.audioEscapando = new Audio(sonidos.pacman_modoEscapando);
+        this.audioPerderPartida = new Audio(sonidos.perderPartida);
     }
 
     async playComerSemilla() {
@@ -73,10 +74,15 @@ class ControladorAudio {
     async playPerderPartida() {
         if(!this.perderPartidaPlaying) {
             this.perderPartidaPlaying = true;
-            let audio = new Audio(sonidos.perderPartida);
-            await audio.play();
-            audio.onended = () => {this.perderPartidaPlaying = false;}
+            this.audioPerderPartida.load();
+            await this.audioPerderPartida.play();
+            this.audioPerderPartida.onended = () => {this.perderPartidaPlaying = false;}
         }
+    }
+
+    async stopPerderPartida() {
+        this.audioPerderPartida.pause();
+        this.perderPartidaPlaying = false;
     }
 
     async playDisparar() {
