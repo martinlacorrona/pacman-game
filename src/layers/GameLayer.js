@@ -5,7 +5,7 @@ class GameLayer extends Layer {
         this.mensaje = new Boton(imagenes.mensaje_como_jugar, 480/2, 320/2);
         this.pausa = true;
 
-        this.ultimoControl = orientaciones.derecha;
+        this.ultimoControl = orientaciones.parado;
 
         this.controladorJuego = new ControladorJuego();
         this.controladorAudio = new ControladorAudio();
