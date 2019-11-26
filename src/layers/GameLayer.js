@@ -58,6 +58,8 @@ class GameLayer extends Layer {
 
     actualizar (){
         if (this.pausa){
+            this.controladorAudio.stopEscapando();
+            this.controladorAudio.stopPerderPartida();
             return;
         }
 
