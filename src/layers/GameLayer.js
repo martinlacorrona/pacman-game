@@ -12,6 +12,8 @@ class GameLayer extends Layer {
 
         this.puntuacionFinal = undefined;
 
+        this.disparado = false;
+
         this.iniciar();
     }
 
@@ -317,12 +319,17 @@ class GameLayer extends Layer {
 
         // disparar
         if (  controles.disparo ){
-            let nuevoDisparo = this.jugador.disparar();
-            if ( nuevoDisparo != null ) {
-                this.espacio.agregarCuerpoDinamico(nuevoDisparo);
-                this.disparosJugador.push(nuevoDisparo);
-                this.controladorAudio.playDisparar();
+            if(!this.disparado) {
+                let nuevoDisparo = this.jugador.disparar();
+                if (nuevoDisparo != null) {
+                    this.espacio.agregarCuerpoDinamico(nuevoDisparo);
+                    this.disparosJugador.push(nuevoDisparo);
+                    this.controladorAudio.playDisparar();
+                }
+                this.disparado = true;
             }
+        } else {
+            this.disparado = false;
         }
 
         // Eje X
