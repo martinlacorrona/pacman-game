@@ -22,7 +22,7 @@ class ControladorAudio {
     async playEscapando() {
         if(!this.escapandoPlaying) {
             this.escapandoPlaying = true;
-            this.audioEscapando = new Audio(sonidos.pacman_modoEscapando);
+            this.audioEscapando.load();
             await this.audioEscapando.play();
             this.audioEscapando.onended = () => {this.escapandoPlaying = false;}
         }
