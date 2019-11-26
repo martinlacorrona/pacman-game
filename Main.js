@@ -31,6 +31,7 @@ function loop(){
     fotograma++;
 
     layer.actualizar();
+
     if (entrada == entradas.pulsaciones) {
         layer.calcularPulsaciones(pulsaciones);
     }

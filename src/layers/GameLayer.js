@@ -16,8 +16,9 @@ class GameLayer extends Layer {
     }
 
     iniciar() {
-        this.version = new Texto(version,480*0.90,320*0.99, undefined, "8px Arial");
-        this.botonDisparo = new Boton(imagenes.boton_disparo,480*0.87,320*0.55, 0.5, 0.5);
+        this.version = new Texto(version,480*0.90,320*0.99, undefined, "8px Arial", "center");
+        this.disparar = new Texto("PULSA ESPACIO PARA DISPARAR",480*0.195,320*0.99, undefined, "8px Arial");
+            this.botonDisparo = new Boton(imagenes.boton_disparo,480*0.87,320*0.55, 0.5, 0.5);
         this.botonPausa = new Boton(imagenes.boton_pausa,480*0.97,320*0.065, 0.5, 0.5);
         this.botonReiniciar = new Boton(imagenes.boton_reiniciar,480*0.97,320*0.14, 0.5, 0.5);
         this.pad = new Pad(480*0.75,320*0.8);
@@ -61,6 +62,8 @@ class GameLayer extends Layer {
             this.controladorAudio.stopPerderPartida();
             return;
         }
+
+        this.updateValorTextoDisparar();
 
         if(this.controladorJuego.vidas != 0)
             this.controladorAudio.stopPerderPartida();
@@ -292,6 +295,8 @@ class GameLayer extends Layer {
         this.botonPausa.dibujar();
         this.botonReiniciar.dibujar();
         this.version.dibujar();
+        if(this.jugador.balas > 0)
+            this.disparar.dibujar();
         if(this.controladorJuego.fueGeneradoBoss)
             this.jefeFinalGenerado.dibujar();
         if ( !this.pausa && entrada == entradas.pulsaciones) {
@@ -660,5 +665,14 @@ class GameLayer extends Layer {
             this.enemigosBoss.splice(posArray, 1);
         }
         this.controladorAudio.playComerEnemigo();
+    }
+
+    updateValorTextoDisparar() {
+        if(entrada == entradas.pulsaciones)
+            this.disparar.valor =  " "; // No muestra nada, ya esta el botn
+        else if(entrada == entradas.gamepad)
+            this.disparar.valor = "PULSA A PARA DISPARAR";
+        else if(entradas == entradas.teclado)
+            this.disparar.valor = "PULSA ESPACIO PARA DISPARAR"
     }
 }
