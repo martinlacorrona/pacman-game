@@ -4,6 +4,9 @@ JavaScript game for "Software de entretenimiento en Videojuegos".
 # Do you want to try the game?
 https://martinlacorrona.github.io/pacman-game/
 
+# Android version
+https://github.com/martinlacorrona/pacman-game-android
+
 # Controls
 ## Gamepad
 - A: shot, continue
